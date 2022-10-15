@@ -59,6 +59,9 @@
     
     // lighting rig
     var lights;
+
+    // Dots
+    var dots = new Dots();
             
     ////////////////////////////////////////////////////////////////
     // init
@@ -313,10 +316,8 @@
     
     var snapPos = null;
     const circleGeometry = new THREE.CircleGeometry( 0.08, 32 );
-    const circleMaterial = new THREE.MeshBasicMaterial( { color: 0x888888 } );
-    const dotMaterial = new THREE.MeshBasicMaterial( { color: 0x000000 } );
-    var circle = null;    
-    var point33 = 1.0/3;
+    const circleMaterial = new THREE.MeshBasicMaterial( { color: 0x888888 } );    
+    var circle = null;        
 
     const linePts = [
         new THREE.Vector3(-0.075, 0, 0),
@@ -364,19 +365,18 @@
                     circle = new THREE.Mesh( circleGeometry, circleMaterial );                
                     circle.rotation.x = -Math.PI/2;
                     scene.add(circle);
-                }
-                //var target = snapPos;
-                //if(target)
-                //    AnimationUtils.tweenVec3(circle.position, target, 25).start();                    
+                }                
                 circle.position.x = snapPos.x;
                 circle.position.z = snapPos.z;
             }            
             else{
-                var dot = new THREE.Mesh( circleGeometry, dotMaterial );                
-                dot.position.x = snapPos.x;
-                dot.position.z = snapPos.z;
-                dot.rotation.x = -Math.PI/2;
-                scene.add(dot);                
+                
+                var dot = dots.addDot(snapPos);
+                if(dot){
+                    scene.add(dot);   
+                    scene.remove(circle);    
+                    circle = null;         
+                }
                 snapPos = null;
             }            
         }
@@ -428,11 +428,12 @@
 
         if(actionState == actionStates.DOT){
             if(snapPos){       
-                var dot = new THREE.Mesh( circleGeometry, dotMaterial );                
-                dot.position.x = snapPos.x;
-                dot.position.z = snapPos.z;
-                dot.rotation.x = -Math.PI/2;
-                scene.add(dot);                
+                var dot = dots.addDot(snapPos);
+                if(dot){                                
+                    scene.add(dot);                
+                    scene.remove(circle);   
+                    circle = null;          
+                }
                 snapPos = null;         
             }
         }                        
