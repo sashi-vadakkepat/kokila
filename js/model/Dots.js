@@ -28,8 +28,7 @@ Dots.prototype.addDot = function(pos){
         dot.position.x = pos.x;
         dot.position.z = pos.z;
         dot.rotation.x = -Math.PI/2;
-        this.dots.push(dot);
-        console.log('inserted');
+        this.dots.push(dot);        
         return dot;
     }
     else{

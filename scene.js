@@ -304,11 +304,9 @@
         mousePos = new THREE.Vector2(x, y);            
         lastPoint = get3dPointZAxis(plane);          
         switch(actionState){
-            case actionStates.DOT:
-                console.log('dot');
+            case actionStates.DOT:                
                 break;
-            case actionStates.DASH:
-                console.log('dash');
+            case actionStates.DASH:                
                 break;                
         }        
     }
