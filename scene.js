@@ -317,7 +317,9 @@
     var snapPos = null;
     const circleGeometry = new THREE.CircleGeometry( 0.08, 32 );
     const circleMaterial = new THREE.MeshBasicMaterial( { color: 0x888888 } );    
+    const circleHighlightMaterial = new THREE.MeshBasicMaterial( { color: 0x880000 } );    
     var circle = null;        
+    var circleHighlight = null;
 
     const linePts = [
         new THREE.Vector3(-0.075, 0, 0),
@@ -354,12 +356,12 @@
         var baryX = 1.0 - (high.x - pos.x);
         var baryZ = 1.0 - (high.z - pos.z);
         snapPos = new THREE.Vector3();        
+        snapPos.x = baryX > 0.5 ? high.x : low.x;
+        snapPos.z = baryZ > 0.5 ? high.z : low.z;
 
         // dot
         if(actionState == actionStates.DOT){            
-           
-            snapPos.x = baryX > 0.5 ? high.x : low.x;
-            snapPos.z = baryZ > 0.5 ? high.z : low.z;
+                       
             if(!mouseDown){
                 if(!circle){
                     circle = new THREE.Mesh( circleGeometry, circleMaterial );                
@@ -369,8 +371,7 @@
                 circle.position.x = snapPos.x;
                 circle.position.z = snapPos.z;
             }            
-            else{
-                
+            else{                
                 var dot = dots.addDot(snapPos);
                 if(dot){
                     scene.add(dot);   
@@ -381,40 +382,22 @@
             }            
         }
         else if(actionState == actionStates.DASH){       
-            pos.x -= low.x;
-            pos.y -= low.y;
-            pos.z -= low.z;
-            
-            var leastDist = Infinity;
-            var leastIndex = -1;
-            
-            for (var i = 0; i < dashPoints.length; ++i){
-                var dist = dashPoints[i].distanceTo(pos);
-                if( leastDist > dist){                    
-                    leastDist = dist;
-                    leastIndex = i;
-                }
-            }        
-            snapPos.x = low.x + dashPoints[leastIndex].x;             
-            snapPos.z = low.z + dashPoints[leastIndex].z;               
-
             if(!mouseDown){
-                if(!cross){              
-                    cross = new THREE.Object3D();      
-                    cross.add(snapLine1);
-                    cross.add(snapLine2);
-                    scene.add(cross);
-                }                
-                
-                /*
-                var target = snapPos;
-                if(target)
-                    AnimationUtils.tweenVec3(snapLine.position, target, 25).start();                    
-                    */
-                cross.position.x = snapPos.x;
-                cross.position.z = snapPos.z;
+                if(dots.dotExists(snapPos)){
+                    if(!circleHighlight){
+                        circleHighlight = new THREE.Mesh( circleGeometry, circleHighlightMaterial );                
+                        circleHighlight.rotation.x = -Math.PI/2;
+                        scene.add(circleHighlight);
+                    }
+                    circleHighlight.position.x = snapPos.x;
+                    circleHighlight.position.z = snapPos.z;
+                }   
+                else{
+                    scene.remove(circleHighlight);
+                    circleHighlight = null;
+                }                             
             }            
-            else{                
+            else{                            
             }            
         }                
     }
@@ -514,8 +497,8 @@
     }
         
     function setActionStateHelper(state){         
-        scene.remove(circle); circle = null;
-        scene.remove(cross); cross = null;
+        scene.remove(circle); circle = null;        
+        scene.remove(circleHighlight); circleHighlight = null;
         actionState = state;        
     }           
    
