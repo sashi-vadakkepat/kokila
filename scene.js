@@ -319,6 +319,7 @@
     var circle = null;        
     var circleHighlight = null;
 
+    /*
     const linePts = [
         new THREE.Vector3(-0.075, 0, 0),
         new THREE.Vector3(0.075, 0, 0 )
@@ -331,6 +332,7 @@
     var snapLine2 = new THREE.Line(line2Geometry, lineMaterial);                    
     snapLine2.rotation.y = -Math.PI/4;
     var cross = null;
+    */
 
     var dashPoints = [
         new THREE.Vector3(0.5, 0, 0.5),
