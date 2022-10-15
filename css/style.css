@@ -1,0 +1,918 @@
+
+:root{
+    --ll-2dui-padding-factor:25;
+}
+  
+  .limit-min-max {
+    font-size: 3vw;
+  }
+
+  @media (max-width: 666.6666666667px) {
+    .limit-min-max {
+      font-size: 1.6em;
+    }
+  }
+
+  @media (min-width: 1666.6666666667px) {
+    .limit-min-max {
+      font-size: 3em;
+    }
+  }
+
+#ifr{
+    width: 100%; 
+    height: 100%;
+    position:absolute; 
+    border:none;
+    touch-action:none;
+}
+.ui-layer-2d{            
+    /*
+    border: 1px solid black;
+    background-color: white;
+    */
+    position:relative;    
+    /*height:100%;        */
+}
+
+/* to scale the fast office logo */
+.thumbnail img {
+    max-height: 100%;
+    max-width: 100%;
+}
+
+
+.ui-layer-2d-padding{
+    padding-right:2em;
+    padding-bottom:0.2em;
+    padding-left:2em;
+    padding-top:1em
+}
+
+.grid-col{    
+    padding:0;
+}
+
+/*a{color:pink;}*/
+a:hover{color:palevioletred;}
+
+.ll-border{
+    border: 1px solid black;
+}
+
+.grid-col-left{
+    text-align: left;
+}
+
+.grid-col-center{
+    text-align: center;            
+}
+
+.grid-col-right{
+    text-align: right;            
+}
+
+label{    
+    margin:0;
+}
+
+/* font size for icons */
+i{    
+    font-size: 3em;    
+}
+
+/* styling for all checkboxes*/
+input[type="checkbox"]{
+  display:none;
+}
+
+/* styling for mode toolbar */
+label input[type="radio"] ~i.ll-icon-select{
+    color:black;    display: inline;
+}
+label input[type="radio"]:checked  ~i.ll-icon-select{
+    color:palevioletred;    display: inline;
+}
+label input[type="radio"] ~i.ll-icon-measure{
+    color: black;    display: inline;
+}
+label input[type="radio"]:checked  ~i.ll-icon-measure{
+    color:palevioletred;    display: inline;
+}
+label input[type="radio"] ~i.ll-icon-suite{
+    color: black;    display: inline;
+}
+label input[type="radio"]:checked  ~i.ll-icon-suite{
+    color:palevioletred;    display: inline;
+}
+label input[type="radio"]:checked  ~i.ll-icon-checkboxoff{
+    color:palevioletred;    display: inline;
+}
+label input[type="radio"] ~i.ll-icon-extrude{
+    color: black;    display: inline;
+}
+label input[type="radio"]:checked  ~i.ll-icon-extrude{
+    color:palevioletred;    display: inline;
+}
+label input[type="radio"] ~i.ll-icon-circolumn{
+    color: black;    display: inline;
+}
+label input[type="radio"]:checked  ~i.ll-icon-circolumn{
+    color:palevioletred;    display: inline;
+}
+label input[type="radio"] ~i.ll-icon-wall{
+    color: black;    display: inline;
+}
+label input[type="radio"]:checked  ~i.ll-icon-wall{
+    color:palevioletred;    display: inline;
+}
+label input[type="radio"] ~i.ll-icon-door{
+    color: black;    display: inline;
+}
+label input[type="radio"]:checked  ~i.ll-icon-door{
+    color:palevioletred;    display: inline;
+}
+label input[type="radio"]:checked  ~i.ll-icon-furniture{
+    color:palevioletred;    display: inline;
+}
+label input[type="radio"] ~i.ll-icon-walk-through{
+    color: black;    display: inline;
+}
+label input[type="radio"]:checked  ~i.ll-icon-walk-through{
+    color:palevioletred;    display: inline;
+}
+label input[type="radio"] ~i.ll-icon-ceiling{
+    color: black;    display: inline;
+}
+label input[type="radio"]:checked  ~i.ll-icon-ceiling{
+    color:palevioletred;    display: inline;
+}
+
+label input[type="radio"] ~i.ll-icon-two-d{
+    color: black;    display: inline;
+}
+label input[type="radio"]:checked  ~i.ll-icon-two-d{
+    color:palevioletred;    display: inline;
+}
+label input[type="radio"] ~i.ll-icon-three-d{
+    color: black;    display: inline;
+}
+label input[type="radio"]:checked  ~i.ll-icon-three-d{
+    color:palevioletred;    display: inline;
+}
+
+label input[type="radio"] ~svg.ll-icon-2d{
+    color: black;    display: inline;
+}
+label input[type="radio"]:checked  ~svg.ll-icon-2d{
+    color:palevioletred;    display: inline;
+}
+label input[type="radio"] ~svg.ll-icon-3d{
+    color: black;    display: inline;
+}
+label input[type="radio"]:checked  ~svg.ll-icon-3d{
+    color:palevioletred;    display: inline;
+}
+label input[type="radio"] ~svg.ll-icon-25d{
+    color: black;    display: inline;
+}
+label input[type="radio"]:checked  ~svg.ll-icon-25d{
+    color:palevioletred;    display: inline;
+}
+
+label input[type="radio"] ~i.ll-icon-feet{
+    color: black;    display: inline;
+}
+label input[type="radio"]:checked  ~i.ll-icon-feet{
+    color:palevioletred;    display: inline;
+}
+label input[type="radio"] ~i.ll-icon-meter{
+    color: black;    display: inline;
+}
+label input[type="radio"]:checked  ~i.ll-icon-meter{
+    color:palevioletred;    display: inline;
+}
+label input[type="radio"] ~i.ll-icon-hotspot{
+    color: black;    display: inline;
+}
+label input[type="radio"]:checked  ~i.ll-icon-hotspot{
+    color:palevioletred;    display: inline;
+}
+
+label input[type="radio"] ~i.ll-icon-panocam{
+    color: black;    display: inline;
+}
+label input[type="radio"]:checked  ~i.ll-icon-panocam{
+    color:palevioletred;    display: inline;
+}
+
+label input[type="radio"] ~i.ll-icon-rooms{
+    color: black;    display: inline;
+}
+label input[type="radio"]:checked  ~i.ll-icon-rooms{
+    color:palevioletred;    display: inline;
+}
+
+label input[type="checkbox"] ~ .ll-join-mtg-off{
+    display: inline;
+}
+label input[type="checkbox"] ~ .ll-join-mtg-on{
+    display: none;
+}
+label input[type="checkbox"]:checked ~ .ll-join-mtg-off{
+    display: none;
+}
+label input[type="checkbox"]:checked ~ .ll-join-mtg-on{
+    color: palevioletred; display: inline;
+}
+
+
+
+
+
+/* styling for full screen checkbox */
+label input[type="checkbox"] ~ i.ll-icon-fullscreen{
+    /*color: black;*/    display: inline;
+}
+label input[type="checkbox"] ~ i.ll-icon-exit-fullscreen{
+    display: none;
+}
+label input[type="checkbox"]:checked ~ i.ll-icon-fullscreen{
+    display: none;
+}
+label input[type="checkbox"]:checked ~ i.ll-icon-exit-fullscreen{
+    /*color: palevioletred;*/   display: inline;
+}
+
+/* styling for visible checkbox */
+label input[type="checkbox"] ~ i.ll-icon-eye{
+    /*color: black;*/    display: none;
+}
+label input[type="checkbox"] ~ i.ll-icon-eyeoff{
+    color: palevioletred; display: inline;  /*font-weight: bold;*/
+}
+label input[type="checkbox"]:checked ~ i.ll-icon-eyeoff{
+    display: none;
+}
+label input[type="checkbox"]:checked ~ i.ll-icon-eye{
+    /*color: palevioletred;*/   display: inline;
+}
+
+/* styling for lock checkbox */
+label input[type="checkbox"] ~ i.ll-icon-lock{
+    /*color: black;*/    display: none;
+}
+label input[type="checkbox"] ~ i.ll-icon-lockopen{
+    display: inline; 
+}
+label input[type="checkbox"]:checked ~ i.ll-icon-lockopen{
+    display: none;
+}
+label input[type="checkbox"]:checked ~ i.ll-icon-lock{
+    color: palevioletred;   display: inline; /*font-weight: bold;*/
+}
+
+/* styling for panel checkbox */
+label input[type="checkbox"] ~ i.ll-icon-panel{
+    /*color: black;*/    display: none;
+}
+label input[type="checkbox"] ~ i.ll-icon-paneloff{
+    display: inline;
+}
+label input[type="checkbox"]:checked ~ i.ll-icon-paneloff{
+    display: none;
+}
+label input[type="checkbox"]:checked ~ i.ll-icon-panel{
+    /*color: palevioletred;*/   display: inline;
+}
+
+
+/* styling for radio hover */
+label:hover input[type="radio"] ~ i {
+color: palevioletred;
+}
+
+/* styling for button hover */
+div[data-toggle="buttons"] label:hover {
+color:palevioletred;
+}
+
+
+/* styling for buttons in active state */
+div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active {
+-webkit-box-shadow: none;
+box-shadow: none;
+} 
+
+/* styling for tooltips */
+
+.tooltip-style {
+    height:2.8em;
+    padding:0.5em;
+    border-radius: 7.5%;
+    background:white;
+    border: 1px solid palevioletred;
+    color: palevioletred;
+    text-align: center !important;
+    font-size:1em;
+    vertical-align:middle;
+  }
+
+  
+.tooltip > .tooltip-inner{ color:#000; font-weight:400;  background-color:white;}
+.tooltip.bs-tooltip-auto[x-placement^=right] .arrow::before, .tooltip.bs-tooltip-right .arrow::before { border-right-color: palevioletred;}
+.tooltip.bs-tooltip-auto[x-placement^=bottom] .arrow::before, .tooltip.bs-tooltip-bottom .arrow::before { border-bottom-color: palevioletred;}
+.tooltip.bs-tooltip-auto[x-placement^=left] .arrow::before, .tooltip.bs-tooltip-left .arrow::before { border-left-color: palevioletred;}
+.tooltip.bs-tooltip-auto[x-placement^=top] .arrow::before, .tooltip.bs-tooltip-top .arrow::before { border-top-color: palevioletred;}
+
+/* styling for navigation toolbar controls */
+
+.navigation-toolbar{
+    /*margin: 0 auto;    */
+    position:absolute;
+    bottom:0.1em;
+    left:50%;
+    transform: translate(-50%, 0%);    
+    /*padding:0.5em;*/
+    margin-bottom:3vmin;
+}
+
+
+.circle-container {
+	position: relative;	
+    height: 6vmin; /*3x the height of the icons */
+    width: 6vmin;
+    display:inline-block;    
+	/*
+	border: dashed 1px;
+	border-radius: 50%;
+	*/			
+}
+.circle-container i {
+	display: block;
+	overflow: hidden;
+	position: absolute;
+	top: 50%; left: 50%;    
+	width: 1em; height: 1em;	
+	margin: -0.5em;	
+	/*border: dashed 1px;*/
+}
+
+.nav-center-container{
+    padding-right:2vmin; 
+    padding-left:2vmin;
+}
+
+.deg0 { transform: translate(1em); }
+.deg90 { transform: rotate(90deg) translate(1em) rotate(-90deg); }
+.deg180 { transform: translate(-1em); }
+.deg270 { transform: rotate(270deg) translate(1em) rotate(-270deg); }
+
+.deg0_in { transform: translate(0.7em); }
+.deg90_in { transform: rotate(90deg) translate(0.7em) rotate(-90deg); }
+.deg180_in { transform: translate(-0.7em); }
+.deg270_in { transform: rotate(270deg) translate(0.7em) rotate(-270deg); }
+
+.ll-toolbar{/*
+    background-color:rgba(1, 1, 1, 0.1);
+    border: 1px solid black;
+    border-radius: 1em;       */    
+}
+
+.ll-toolbar-left-padding{
+    padding-left:1em;
+}
+
+.ll-toolbar-element{
+    padding:0;
+}
+
+#mode-toolbar{
+    position:absolute;
+    left:calc(var(--ll-2dui-padding-factor) * 0.5px);
+    top:calc(var(--ll-2dui-padding-factor) * 5px);
+}
+
+.btn-settings {
+    color: #000;
+    background-color:#fff;
+    border-color: #000;
+    vertical-align: middle;
+    padding:0;
+    border:none;    
+}
+
+.btn-settings:hover, .btn-settings:focus, .btn-settings:active, .btn-settings.active, .open>.dropdown-toggle.btn-settings {
+    color: palevioletred;
+    background-color: #fff;
+    border-color: palevioletred;
+
+    outline:none; 
+    box-shadow:none;
+}
+
+.layer-control{
+    font-size: 0.6em;    
+    /*float: right;    */
+    /*border:1px solid black;*/
+}
+
+/* styling for settings menu */
+ .dropdown-item:active{
+    background:rgba(0, 0, 0, 0.0);
+    color:black;
+}
+
+#share-dropdown > .btn {
+    background:transparent;
+}
+#import-dropdown > .btn {
+    background:transparent;
+}
+
+#settings-dropdown > .btn {
+    background:transparent;
+}
+
+#settings-menu{
+    width:15em;
+}
+
+.trash-toolbar{
+    position:relative;
+}
+
+.trash-btn{
+    position:fixed;
+    right:0;
+    bottom:0;
+    padding:1em;
+}
+
+:focus{outline:none!important;}
+.dropdown-item:hover{color:palevioletred!important;}
+
+h6{ display:inline !important}
+
+.custom-control-input~.custom-control-indicator{
+    background-color: gray !important;
+   }
+   
+.custom-control-input:focus~.custom-control-indicator{
+    box-shadow: none !important; 
+   }
+.custom-control-input:hover~.custom-control-indicator{
+    background-color:palevioletred !important;
+   }
+
+
+#accordion{    
+    width:15.5em;
+    height:auto;    
+}
+
+.card{
+    margin-top:4px;
+    border:none;
+}
+.card-header{
+    height:3em;
+    /*border:none;*/
+}
+
+.product-img{
+    height:64px;
+    width:64px;
+}
+/*
+.product-img:focus{ 
+    border:0.05em solid palevioletred;
+    border-radius:5px;
+}*/
+
+.product-img:hover{ 
+    border:0.05em solid palevioletred;
+    border-radius:5px;
+}
+/*
+.card-header [aria-expanded=true]{    
+    pointer-events: none;
+}
+*/
+
+#library{
+    height:42em;
+    overflow-y: scroll;
+    width:auto;    
+    position:absolute;
+    right:0;
+    top:50%;
+    transform: translate(0%, -50%);    
+    margin-right:1.5em;    
+
+    border: 1px solid lightgray;
+    padding:0.5em;
+    display:none;
+    background-color:white;    
+    z-index: 100;
+}
+
+.product-catalog-category{       
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+} /* this targets the default scrollbar (compulsory) */
+
+::-webkit-scrollbar-track {
+    background-color: white;    
+} /* the new scrollbar will have a flat appearance with the set background color */
+
+::-webkit-scrollbar-thumb {
+    background-color: lightgrey; 
+    border-radius: 3px;    
+} /* this will style the thumb, ignoring the track */
+
+::-webkit-scrollbar-button {
+    background-color:blue;
+    height:0;
+} /* optionally, you can style the top and the bottom buttons (left and right for horizontal bars) */
+
+::-webkit-scrollbar-corner {
+    background-color: black;
+}
+
+.truncate {
+    width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+.ll-slider-top-margin{
+    margin-top: 0.5em;
+}
+
+.ll-slider-bottom-margin{
+    margin-bottom: 1em;
+}
+
+  #wallDialog{
+    width: 12rem;
+  }
+
+  .playback-controls{
+      /*background:transparent;   */
+      background:rgba(255, 255, 255, 0.3);
+      padding:0.3em;   
+  }
+
+  /* for catalog dropdown*/
+  .form-control:focus {
+    border-color:lightgrey;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px white;
+  }  
+
+  .popover{
+    max-width: 40%; /* Max Width of the popover (depending on the container!) */
+    font-size: 1em;
+  }
+
+  @media (min-width: 768px) {
+    .modal-xl {
+      width: 100%;
+     max-width:1200px;
+    }
+  }
+
+  /* drop down sub-menu */
+
+  
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu>.dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -6px;
+    margin-left: -1px;
+    -webkit-border-radius: 0 6px 6px 6px;
+    -moz-border-radius: 0 6px 6px;
+    border-radius: 0 6px 6px 6px;
+}
+
+.dropdown-submenu:hover>.dropdown-menu {
+    display: block;
+}
+
+.dropdown-submenu>a:after {
+    display: block;
+    content: " ";
+    float: right;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px 0 5px 5px;
+    border-left-color: #ccc;
+    margin-top: 5px;
+    margin-right: -10px;
+}
+
+.dropdown-submenu:hover>a:after {
+    border-left-color: #fff;
+}
+
+.dropdown-submenu.pull-left {
+    float: none;
+}
+
+.dropdown-submenu.pull-left>.dropdown-menu {
+    left: -100%;
+    margin-left: 10px;
+    -webkit-border-radius: 6px 0 6px 6px;
+    -moz-border-radius: 6px 0 6px 6px;
+    border-radius: 6px 0 6px 6px;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+.table-borderless th{border:0;}
+.table-borderless td{border:0;}
+        
+.table > tbody > tr > td {
+    vertical-align: middle;
+}
+
+.tableFixHead {
+    overflow-y: auto;        
+}
+  
+.tableFixHead table {
+    border-collapse: collapse;
+    width: 100%;
+}
+  
+.tableFixHead th {
+    position: sticky;
+    top: 0;
+    background: #fff;
+}
+
+.highlight{
+    background-color: #FDEDEC;
+}
+
+/*
+.table-hover tbody tr:hover td {
+    background: #FDEDEC;
+}
+*/
+
+.modal-body-ti {
+    max-height: calc(100vh - 350px);
+    overflow-y: auto;
+}
+
+.modal-body-ffe {
+    max-height: calc(100vh - 450px);
+    overflow-y: auto;
+}
+
+.btn:focus, .btn:active {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  .dropdown-menu {
+    min-width: 110px !important;
+  }
+
+  .no-padding-right{
+      padding-right:0;
+  }
+
+  .rotate {
+    animation: rotation 2s infinite linear;
+  }
+
+  @keyframes rotation {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(359deg);
+    }
+  }
+
+  /* styling for visible checkbox */
+label input[type="checkbox"] ~ i.ll-icon-three-d{
+    /*color: black;*/    display: none;
+}
+label input[type="checkbox"]:checked ~ i.ll-icon-two-d{
+    display: none;
+}
+label input[type="checkbox"]:checked ~ i.ll-icon-three-d{
+    /*color: palevioletred;*/   display: inline;
+}
+
+/* safe 6 styling */
+
+label input[type="radio"] ~svg.bi{
+    color:black;    display: inline;
+}
+label input[type="radio"]:checked  ~svg.bi{
+    color:palevioletred;    display: inline;
+}
+
+label:hover input[type="radio"] ~ svg {
+    color: palevioletred;
+}
+    
+label:hover input[type="checkbox"] ~ i {
+    color: palevioletred;
+}
+
+.bi:hover{
+    color: palevioletred;
+}
+
+        
+#s6-zone-wizard{    
+    overflow-y: scroll;    
+    position:absolute;
+    right:0;
+    top:20%;
+    transform: translate(0%, -20%);    
+    margin-right:1.5em;    
+    
+    display:none;
+    
+    z-index: 100;
+}
+
+/* dropdown modes */
+
+.icon-wrapper{
+    position:relative;
+}
+.icon-info{
+    position:absolute;          
+    top:0;
+    right:0;
+}
+.mode-dropdown{
+    padding:0;
+}
+.mode-dropdown-icon{
+    padding:0.5em;
+}
+
+label input[type="radio"] ~ .icon-wrapper > i{
+    color: black;    display: inline;
+}
+label input[type="radio"]:checked ~ .icon-wrapper > i{
+    color:palevioletred;    display: inline;
+}
+label:hover input[type="radio"] ~ .icon-wrapper > i {
+    color: palevioletred;
+}
+
+label input[type="radio"] ~ .icon-wrapper > svg{
+    color: black;    display: inline;
+}
+label input[type="radio"]:checked ~ .icon-wrapper > svg{
+    color:palevioletred;    display: inline;
+}
+label:hover input[type="radio"] ~ .icon-wrapper > svg {
+    color: palevioletred;
+}
+    
+.chat{
+    position:fixed;
+    right:0;
+    bottom:0;
+    padding:1em;
+}
+
+#chat-window{
+    height:30em;
+    overflow-y: none;
+    width:20em;    
+    position:absolute;
+    right:0;
+    top:80%;
+    transform: translate(0%, -80%);    
+    margin-right:1.5em;    
+
+    border: 1px solid lightgray;
+    padding:0.5em;
+    display:none;
+    background-color:white;    
+    z-index: 100;
+}
+
+.chat-content{
+    overflow-y: scroll;
+}
+
+label input[type="checkbox"] ~ .ll-chat-off{
+    display: inline;
+}
+label input[type="checkbox"] ~ .ll-chat-on{
+    display: none;
+}
+label input[type="checkbox"]:checked ~ .ll-chat-off{
+    display: none;
+}
+label input[type="checkbox"]:checked ~ .ll-chat-on{
+    color: palevioletred; display: inline;
+}
+
+.chat-name-right{    
+    display:block;
+    text-align: right;
+    padding: 0.4em;
+    clear:both;
+}
+
+.chat-name-left{
+    display:block;
+    text-align: left;
+    padding: 0.4em;
+    clear:both;
+}
+
+
+.chat-bubble{
+    display:block;
+    width:fit-content;
+    max-width:80%;
+    padding:0.4em;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    margin-bottom:0.5em;    
+    border-radius: 10px;
+    clear:both;
+}
+
+.right{
+    float: right;   
+    background: #A9DFBF; 
+}
+
+.left{
+    float: left;    
+    background: #AEB6BF; 
+}
+
+.chat-target{    
+    display: none;
+}
+
+.chat-header{
+    height: 10%;
+    background-color: white;
+}
+
+.chat-main-content{
+    height: 90%;
+}
+
+.chat-target-content{
+    height: 80%;
+}
+
+.chat-target-footer{
+    height: 10%;
+    background-color: white;
+}
+
+.list-group-hover .list-group-item:hover {
+    color: palevioletred;
+}
+
+.subheader {
+    background-color: #FAFDFF;
+    font-size: 1em;
+    font-weight: bold;
+    padding: 0.75em;
+  }
+
+label input[type="checkbox"] ~ .ll-notifications-off{
+    display: inline;
+}
+label input[type="checkbox"] ~ .ll-notifications-on{
+    display: none;
+}
+label input[type="checkbox"]:checked ~ .ll-notifications-off{
+    display: none;
+}
+label input[type="checkbox"]:checked ~ .ll-notifications-on{
+    display: inline;
+}

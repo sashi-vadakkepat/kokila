@@ -1,0 +1,10 @@
+Licenses
+--------
+
+LightLine uses the following libraries
+
+- Javascript_Clipper_6.2.1.0 - http://www.angusj.com 
+- threejs - https://www.threejs.org
+
+under the appropriate licenses.
+

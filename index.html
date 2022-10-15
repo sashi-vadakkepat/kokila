@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    
+  	<meta charset="utf-8">
+  	<title>Layout 3.9.7 </title>  
+
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+  
+
+	  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+	  	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		  	
+	<link href="css/style.css" rel="stylesheet">	
+	<link href="css/ll3d-style.css" rel="stylesheet">	
+	<link href="css/icons/style.css" rel="stylesheet">        
+	
+  <script>   
+  		
+  	$(function() {		
+
+        var toolbars = document.getElementsByClassName("ll-toolbar");
+        for (var i=0; i<toolbars.length; ++i){
+            var elements = toolbars[i].getElementsByTagName("i");            
+            for (var j=0; j<elements.length; ++j)
+            {
+                var el = elements[j];      
+                el.setAttribute( "class", el.getAttribute("class") + " limit-min-max" );
+            }
+        }
+        
+        
+		params = getParams();
+	  	window.onload = function () {
+			onWindowLoaded();			  		
+		}				
+		setupToolbars();	        
+	});					
+        
+  </script>    
+  <!--<script type="text/javascript" src="utils.min.js"></script>          -->
+  <script type="text/javascript" src="index.min.js?version=3.9.7"></script>          
+  
+</head>
+
+<body>			
+
+	<iframe name='iframe' id="ifr" src="scene.html">
+	</iframe>	
+	
+	<div class="container-fluid ui-layer-2d ui-layer-2d-padding">
+
+            <div class="row">
+                
+                <div class="col-2 grid-col grid-col-left my-auto">                    
+                    <div id="fast-office-logo" class="thumbnail">          
+                        <a href="#">
+                            <img id="fast-office-logo-img" class="logo" src="img/kokila.png">
+                        </a> 
+                    </div>                                    
+                </div>
+
+                <div id='save-toolbar' class="col-3 grid-col grid-col-left my-auto ll-toolbar" data-toggle="buttons">
+                    <div class="btn-group">												
+
+                        <label id="save-btn" class="btn my-auto" hidden>
+                            <i class="ll-icon-save" data-toggle="tooltip" data-placement="bottom" data-html="true" title="<span class='tooltip-style'>Save</span>"></i>
+						</label>           																													
+						
+                        <div class="btn-group ll-toolbar my-auto" data-toggle="buttons" hidden>
+                            <label id="help-btn" class="btn ll-toolbar-element">
+                                <i class="ll-icon-help" data-toggle="tooltip" data-placement="bottom" data-html="true" title="<span class='tooltip-style'>Help</span>"></i>
+                            </label>                            
+                        </div>                                                     
+
+                    </div>
+				</div>
+                
+                <div class="col-2 grid-col grid-col-center my-auto">                    											
+				</div>
+
+                <div class="col-5 grid-col grid-col-right my-auto" id='top-right-toolbar'>                            
+                    
+                    <div class="btn-group">                                                                                                
+                        
+                        <div id='camera-toolbar' class="btn-group btn-group-toggle ll-toolbar-left-padding ll-toolbar" data-toggle="buttons">
+                            <label id='camera-3d' class="btn ll-toolbar-element">
+                            <input type="radio" name='camera'>                            
+                            <i class="ll-icon-three-d" data-toggle="tooltip" data-placement="bottom" data-html="true" title="<span class='tooltip-style'>3D View</span>"></i>                                                                                    
+                            </label>
+                            <label id='camera-2d' class="btn active ll-toolbar-element">
+                            <input type="radio" name='camera' checked>                            
+                            <i class="ll-icon-two-d" data-toggle="tooltip" data-placement="bottom" data-html="true" title="<span class='tooltip-style'>2D View</span>"></i>                                                                                
+                            </label>                            
+                        </div>							
+                                                						                                                                                                                               
+
+                    </div>                        
+                </div>                
+            </div>                                                                      
+		</div>    
+		<div class='col-4' style='pointer-events:none;font-family:Helvetica, sans-serif;font-size:1.2em;'>
+			<p id='space-name'></p>
+		</div>
+
+        <!-- mode toolbar -->
+		<div id='mode-toolbar' class="btn-group btn-group-toggle btn-group-vertical ll-toolbar" data-toggle="buttons">
+                        
+            <label id='mode-dot' class="btn active text-left" >
+                <input id='mode-select-btn' type="radio" name='mode' checked><i data-toggle="tooltip" data-placement="right" data-html="true" title="<span class='tooltip-style'>Dot</span>"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                    <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                  </svg>                
+            </label>                                                                    
+            
+            <label id='mode-dash' class="btn text-left" >
+                <input type="radio" name='mode'><i data-toggle="tooltip" data-placement="right" data-html="true" title="<span class='tooltip-style'>Measure Distance</span>"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" fill="currentColor" class="bi bi-record-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path d="M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                  </svg>
+            </label>                    
+
+        </div>
+        
+        <div id='nav-toolbar' class="navigation-toolbar ll-toolbar">                
+            <div class="btn-group nav-center-container" data-toggle="buttons">					                
+                <label id='nav-reset' class="btn"><i class="ll-icon-home"></i></label>                                 
+            </div>																				                
+        </div>                                                
+        
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" 
+			integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" 
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+                   
+</body>
+
+</html>					

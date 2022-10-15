@@ -1,0 +1,16 @@
+user_data/
+release/
+ll.min.js
+ll_libs.min.js
+scene.min.js
+viza-scene.min.js
+index.min.js
+viza.min.js
+viewer.min.js
+product-tour.min.js
+wrxspace.min.js
+utils.min.js
+archie.min.js
+archie-scene.min.js
+archie2D.min.js
+node_modules/
