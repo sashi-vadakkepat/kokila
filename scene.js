@@ -319,6 +319,10 @@
     var circle = null;        
     var circleHighlight = null;
 
+    const circleStrokeGeometry = new THREE.CircleGeometry( 0.04, 32 );
+    var circleStroke1 = null;
+    var circleStroke2 = null;
+
     /*
     const linePts = [
         new THREE.Vector3(-0.075, 0, 0),
@@ -382,20 +386,66 @@
             }            
         }
         else if(actionState == actionStates.DASH){       
+
             if(!mouseDown){
-                if(dots.dotExists(snapPos)){
+
+                var nearestNodePair = dots.nearestNodePair(snapPos, pos);
+                if(nearestNodePair){
+                    if(!circleStroke1){
+                        circleStroke1 = new THREE.Mesh( circleStrokeGeometry, circleMaterial );                
+                        circleStroke1.rotation.x = -Math.PI/2;
+                        scene.add(circleStroke1);
+                    }
+                    circleStroke1.position.x = nearestNodePair[0].x;
+                    circleStroke1.position.z = nearestNodePair[0].z;
+
+                    if(!circleStroke2){
+                        circleStroke2 = new THREE.Mesh( circleStrokeGeometry, circleMaterial );                
+                        circleStroke2.rotation.x = -Math.PI/2;
+                        scene.add(circleStroke2);
+                    }
+                    circleStroke2.position.x = nearestNodePair[1].x;
+                    circleStroke2.position.z = nearestNodePair[1].z;
+                }
+                else{
+                    scene.remove(circleStroke1);
+                    circleStroke1 = null;
+
+                    scene.remove(circleStroke2);
+                    circleStroke2 = null;
+                }
+
+                /*
+                var nearestNode = dots.nearestNode(snapPos, pos);
+                if(nearestNode){
+                    if(!circleStroke1){
+                        circleStroke1 = new THREE.Mesh( circleStrokeGeometry, circleMaterial );                
+                        circleStroke1.rotation.x = -Math.PI/2;
+                        scene.add(circleStroke1);
+                    }
+                    circleStroke1.position.x = nearestNode.x;
+                    circleStroke1.position.z = nearestNode.z;
+                }
+                else{
+                    scene.remove(circleStroke1);
+                    circleStroke1 = null;
+                }
+                */
+                /*
+                if(dots.dotExists(snapPos)){               
                     if(!circleHighlight){
                         circleHighlight = new THREE.Mesh( circleGeometry, circleHighlightMaterial );                
                         circleHighlight.rotation.x = -Math.PI/2;
                         scene.add(circleHighlight);
                     }
                     circleHighlight.position.x = snapPos.x;
-                    circleHighlight.position.z = snapPos.z;
+                    circleHighlight.position.z = snapPos.z;     
                 }   
-                else{
+                else{                    
                     scene.remove(circleHighlight);
                     circleHighlight = null;
-                }                             
+                } 
+                */                            
             }            
             else{                            
             }            
@@ -493,7 +543,8 @@
     }
     
     function setActionStateDash(){        
-        setActionStateHelper(actionStates.DASH, false);                
+        setActionStateHelper(actionStates.DASH, false);           
+        dots.setupNodes();     
     }
         
     function setActionStateHelper(state){         

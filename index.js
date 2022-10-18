@@ -72,7 +72,7 @@ function onWindowLoaded(){
     });
 
     $( window ).resize(function() {			
-        positionAllToolbars();			
+        //positionAllToolbars();			
     });			
     contentWindow.switchCamera("orthographic");																		
 }
