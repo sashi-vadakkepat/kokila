@@ -8,7 +8,9 @@
 var Dots = function(){
     this.dots = [];
     this.dotsKdTree = new kdTree([], Dots.distanceFn, ["x", "z"]);    
-    this.nodesKdTree = new kdTree([], Dots.distanceFn, ["pos.x", "pos.z"]);
+    this.nodesKdTree = new kdTree([], Dots.distanceFn, ["x", "z"]);
+
+    Dots.createArcGeometry();
 }
 
 Dots.dotGeometry = new THREE.CircleGeometry( 0.08, 32 );
@@ -38,7 +40,7 @@ const line4Pts = [
 ];
 const line4Geometry = new THREE.BufferGeometry().setFromPoints(line4Pts);
 
-const lineMaterial = new THREE.LineBasicMaterial( { color: 0x333333 } );
+const lineMaterial = new THREE.LineBasicMaterial( { color: 0xbbbbbb } );
 
 Dots.distanceFn = function(a, b){
     var dx = a.x - b.x;
@@ -116,45 +118,146 @@ Dots.prototype.setupNodes = function(){
     var nodesKdTree = this.nodesKdTree;        
     this.dots.forEach(function(dot){
         var pos = dot.position;
-        nodesKdTree.insert(new THREE.Vector3(pos.x + 0.25, 0, pos.z + 0.25));
-        nodesKdTree.insert(new THREE.Vector3(pos.x + 0.25, 0, pos.z - 0.25));
-        nodesKdTree.insert(new THREE.Vector3(pos.x - 0.25, 0, pos.z - 0.25));
-        nodesKdTree.insert(new THREE.Vector3(pos.x - 0.25, 0, pos.z + 0.25));
+        nodesKdTree.insert(new SnapPt(pos.x + 0.25, 0, pos.z + 0.25, "mid", "se"));
+        nodesKdTree.insert(new SnapPt(pos.x + 0.25, 0, pos.z - 0.25, "mid", "ne"));
+        nodesKdTree.insert(new SnapPt(pos.x - 0.25, 0, pos.z - 0.25, "mid", "nw"));
+        nodesKdTree.insert(new SnapPt(pos.x - 0.25, 0, pos.z + 0.25, "mid", "sw"));
 
         var east = new THREE.Vector3(pos.x + 1, 0, pos.z);
         if(dots.dotExists(east)){            
             var nearest = nodesKdTree.nearest(east, 1, 1);
-            if(nearest && nearest[0][1] != 0){
+            if(nearest /*&& nearest[0][1] != 0*/){
                 east.x -= 0.5;
-                nodesKdTree.insert(east);
+                nodesKdTree.insert(new SnapPt(east.x, east.y, east.z, "jct", "e"));
             }
         }
 
         var north = new THREE.Vector3(pos.x, 0, pos.z - 1);
         if(dots.dotExists(north)){            
             var nearest = nodesKdTree.nearest(north, 1, 1);
-            if(nearest && nearest[0][1] != 0){
+            if(nearest /*&& nearest[0][1] != 0*/){
                 north.z += 0.5;
-                nodesKdTree.insert(north);
+                nodesKdTree.insert(new SnapPt(north.x, north.y, north.z, "jct", "n"));
             }
         }
 
         var west = new THREE.Vector3(pos.x - 1, 0, pos.z);
         if(dots.dotExists(west)){
             var nearest = nodesKdTree.nearest(west, 1, 1);
-            if(nearest && nearest[0][1] != 0){
+            if(nearest /*&& nearest[0][1] != 0*/){
                 west.x += 0.5;            
-                nodesKdTree.insert(west);                
+                nodesKdTree.insert(new SnapPt(west.x, west.y, west.z, "jct", "w"));
             }
         }
 
         var south = new THREE.Vector3(pos.x, 0, pos.z + 1);
         if(dots.dotExists(south)){            
             var nearest = nodesKdTree.nearest(south, 1, 1);
-            if(nearest && nearest[0][1] != 0){
+            if(nearest /*&& nearest[0][1] != 0*/){
                 south.z -= 0.5;
-                nodesKdTree.insert(south);                
+                nodesKdTree.insert(new SnapPt(south.x, south.y, south.z, "jct", "s"));
             }
         }
     });
+}
+
+Dots.Radius = Math.sqrt(0.25 * 0.25 + 0.25 * 0.25);
+Dots.ArcRes = 25;
+
+Dots.createArcGeometry = function(){
+    Dots.gEast = new THREE.BufferGeometry().setFromPoints(
+        new THREE.Path().absarc(0, 0, Dots.Radius, -Math.PI/4, Math.PI/4).getSpacedPoints(Dots.ArcRes)
+    );
+    Dots.gSouth = new THREE.BufferGeometry().setFromPoints(
+        new THREE.Path().absarc(0, 0, Dots.Radius, Math.PI/4, 3 * Math.PI/4).getSpacedPoints(Dots.ArcRes)
+    );
+    Dots.gWest = new THREE.BufferGeometry().setFromPoints(
+        new THREE.Path().absarc(0, 0, Dots.Radius, 3*Math.PI/4, 5*Math.PI/4).getSpacedPoints(Dots.ArcRes)
+    );
+    Dots.gNorth = new THREE.BufferGeometry().setFromPoints(
+        new THREE.Path().absarc(0, 0, Dots.Radius, 5* Math.PI/4, -Math.PI/4).getSpacedPoints(Dots.ArcRes)
+    );
+
+    /*    
+    let lEast = new THREE.Line(gEast, m);
+    lEast.rotation.x = Math.PI/2;        
+    let lSouth = new THREE.Line(gSouth, m);
+    lSouth.rotation.x = Math.PI/2;        
+    let lWest = new THREE.Line(gWest, m);
+    lWest.rotation.x = Math.PI/2;        
+    let lNorth = new THREE.Line(gNorth, m);
+    lNorth.rotation.x = Math.PI/2;        
+
+    let circle = new THREE.Object3D();
+    circle.add(lEast);
+    circle.add(lSouth);
+    circle.add(lWest);
+    circle.add(lNorth);
+
+    return circle;
+    */
+}
+
+Dots.StrokeMaterial = new THREE.LineBasicMaterial({color: "black"});
+
+Dots.prototype.getStroke = function(pos, pos1, type1, dir1, pos2, type2, dir2){
+    if(type1 == "jct" || type2 == "jct"){
+        const linePts = [ pos1, pos2 ];
+        const lineGeometry = new THREE.BufferGeometry().setFromPoints(linePts);
+        var line = new THREE.Line(lineGeometry, Dots.StrokeMaterial);                            
+        return line;
+    }
+    else{
+        var arc = null;
+        console.log(dir1 + " to " + dir2);
+        if(dir1 == "se"){
+            if(dir2 == "ne"){
+                // east
+                arc = new THREE.Line(Dots.gEast, Dots.StrokeMaterial);
+            }
+            else if(dir2 == "sw"){
+                // south
+                arc = new THREE.Line(Dots.gSouth, Dots.StrokeMaterial);
+            }
+        }
+        else if(dir1 == "ne"){
+            if(dir2 == "se"){
+                // east
+                arc = new THREE.Line(Dots.gEast, Dots.StrokeMaterial);
+            }
+            else if(dir2 == "nw"){
+                // north
+                arc = new THREE.Line(Dots.gNorth, Dots.StrokeMaterial);
+            }
+        }
+        else if(dir1 == "nw"){
+            if(dir2 == "ne"){
+                // north
+                arc = new THREE.Line(Dots.gNorth, Dots.StrokeMaterial);
+            }
+            else if(dir2 == "sw"){
+                // west
+                arc = new THREE.Line(Dots.gWest, Dots.StrokeMaterial);
+            }
+        }
+        else if(dir1 == "sw"){
+            if(dir2 == "nw"){
+                // west
+                arc = new THREE.Line(Dots.gWest, Dots.StrokeMaterial);
+            }
+            else if(dir2 == "se"){
+                // south
+                arc = new THREE.Line(Dots.gSouth, Dots.StrokeMaterial);
+            }
+        }
+
+        if(arc){
+            arc.position.x = pos.x;
+            arc.position.y = pos.y;
+            arc.position.z = pos.z;
+
+            arc.rotation.x = Math.PI/2;        
+        }
+        return arc;
+    }    
 }

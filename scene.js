@@ -130,7 +130,7 @@
         };
         const grid = new THREE.InfiniteGridHelper(1, 10, new THREE.Color(color));        
         grid.material.uniforms.uColor.value.set( color.value );
-        scene.add(grid);
+        scene.add(grid);                
         
         render();
     }                    
@@ -306,7 +306,9 @@
         switch(actionState){
             case actionStates.DOT:                
                 break;
-            case actionStates.DASH:                
+            case actionStates.DASH:      
+                if(stroke)
+                    stroke = null;          
                 break;                
         }        
     }
@@ -344,6 +346,9 @@
         new THREE.Vector3(-0.5, 0, -0.5),
         new THREE.Vector3(-0.5, 0, 0.5),
     ];
+
+
+    var stroke = null;
 
     function move(event, x, y) {       
                 
@@ -397,7 +402,7 @@
                         scene.add(circleStroke1);
                     }
                     circleStroke1.position.x = nearestNodePair[0].x;
-                    circleStroke1.position.z = nearestNodePair[0].z;
+                    circleStroke1.position.z = nearestNodePair[0].z;                    
 
                     if(!circleStroke2){
                         circleStroke2 = new THREE.Mesh( circleStrokeGeometry, circleMaterial );                
@@ -406,6 +411,24 @@
                     }
                     circleStroke2.position.x = nearestNodePair[1].x;
                     circleStroke2.position.z = nearestNodePair[1].z;
+
+                    //console.log(nearestNodePair[0].type + " to " + nearestNodePair[1].type);
+                    //console.log(nearestNodePair[0].direction + " to " + nearestNodePair[1].direction);
+                    //console.log("~~~")
+
+                    if(stroke){
+                        scene2.remove(stroke);
+                        stroke = null;
+                    }
+                    var pos1 = new THREE.Vector3(nearestNodePair[0].x, nearestNodePair[0].y, nearestNodePair[0].z);
+                    var pos2 = new THREE.Vector3(nearestNodePair[1].x, nearestNodePair[1].y, nearestNodePair[1].z);
+                    stroke = dots.getStroke(snapPos, 
+                                    pos1, nearestNodePair[0].type, nearestNodePair[0].direction,
+                                    pos2, nearestNodePair[1].type, nearestNodePair[1].direction
+                                );
+                    console.log(stroke);
+                    if(stroke)
+                        scene2.add(stroke);
                 }
                 else{
                     scene.remove(circleStroke1);
