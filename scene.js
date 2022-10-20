@@ -425,8 +425,7 @@
                     stroke = dots.getStroke(snapPos, 
                                     pos1, nearestNodePair[0].type, nearestNodePair[0].direction,
                                     pos2, nearestNodePair[1].type, nearestNodePair[1].direction
-                                );
-                    console.log(stroke);
+                                );                    
                     if(stroke)
                         scene2.add(stroke);
                 }

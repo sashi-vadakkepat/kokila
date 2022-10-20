@@ -8,7 +8,7 @@
 var Dots = function(){
     this.dots = [];
     this.dotsKdTree = new kdTree([], Dots.distanceFn, ["x", "z"]);    
-    this.nodesKdTree = new kdTree([], Dots.distanceFn, ["x", "z"]);
+    //this.nodesKdTree = new kdTree([], Dots.distanceFn, ["x", "z"]);
 
     Dots.createArcGeometry();
 }
@@ -115,6 +115,7 @@ Dots.prototype.nearestNodePair = function(snapPos, pos){
 
 Dots.prototype.setupNodes = function(){
     var dots = this;
+    this.nodesKdTree = new kdTree([], Dots.distanceFn, ["x", "z"]);
     var nodesKdTree = this.nodesKdTree;        
     this.dots.forEach(function(dot){
         var pos = dot.position;
@@ -125,37 +126,37 @@ Dots.prototype.setupNodes = function(){
 
         var east = new THREE.Vector3(pos.x + 1, 0, pos.z);
         if(dots.dotExists(east)){            
+            east.x -= 0.5;
             var nearest = nodesKdTree.nearest(east, 1, 1);
-            if(nearest /*&& nearest[0][1] != 0*/){
-                east.x -= 0.5;
-                nodesKdTree.insert(new SnapPt(east.x, east.y, east.z, "jct", "e"));
+            if(nearest && nearest[0][1] != 0){                
+                nodesKdTree.insert(new SnapPt(east.x, east.y, east.z, "jct"));                
             }
         }
 
         var north = new THREE.Vector3(pos.x, 0, pos.z - 1);
         if(dots.dotExists(north)){            
+            north.z += 0.5;
             var nearest = nodesKdTree.nearest(north, 1, 1);
-            if(nearest /*&& nearest[0][1] != 0*/){
-                north.z += 0.5;
-                nodesKdTree.insert(new SnapPt(north.x, north.y, north.z, "jct", "n"));
+            if(nearest && nearest[0][1] != 0){                
+                nodesKdTree.insert(new SnapPt(north.x, north.y, north.z, "jct"));                
             }
         }
 
         var west = new THREE.Vector3(pos.x - 1, 0, pos.z);
         if(dots.dotExists(west)){
+            west.x += 0.5;            
             var nearest = nodesKdTree.nearest(west, 1, 1);
-            if(nearest /*&& nearest[0][1] != 0*/){
-                west.x += 0.5;            
-                nodesKdTree.insert(new SnapPt(west.x, west.y, west.z, "jct", "w"));
+            if(nearest && nearest[0][1] != 0){                
+                nodesKdTree.insert(new SnapPt(west.x, west.y, west.z, "jct"));                
             }
         }
 
         var south = new THREE.Vector3(pos.x, 0, pos.z + 1);
         if(dots.dotExists(south)){            
+            south.z -= 0.5;
             var nearest = nodesKdTree.nearest(south, 1, 1);
-            if(nearest /*&& nearest[0][1] != 0*/){
-                south.z -= 0.5;
-                nodesKdTree.insert(new SnapPt(south.x, south.y, south.z, "jct", "s"));
+            if(nearest && nearest[0][1] != 0){                
+                nodesKdTree.insert(new SnapPt(south.x, south.y, south.z, "jct"));                
             }
         }
     });
@@ -208,8 +209,7 @@ Dots.prototype.getStroke = function(pos, pos1, type1, dir1, pos2, type2, dir2){
         return line;
     }
     else{
-        var arc = null;
-        console.log(dir1 + " to " + dir2);
+        var arc = null;        
         if(dir1 == "se"){
             if(dir2 == "ne"){
                 // east
