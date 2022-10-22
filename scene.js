@@ -306,7 +306,10 @@
     const circleStrokeGeometry = new THREE.CircleGeometry( 0.04, 32 );
     var circleStroke1 = null;
     var circleStroke2 = null;        
-    var stroke = null;
+    var stroke = null;    
+
+    var targets = [];
+    var startNode = null;
 
     function initDots(){
         for(var i = -2; i <= 2; ++i){
@@ -318,7 +321,6 @@
             }
         }
     }
-
 
     // mouse events    
     var dragged = false;
@@ -335,7 +337,28 @@
                 break;
             case actionStates.DASH:      
                 if(stroke)
-                    stroke = null;          
+                    stroke = null;    
+                startNode = nearestNode;      
+                if(targets.length){
+                    targets.forEach(function(t){
+                        scene.remove(t);
+                    });                        
+                }
+
+                if(startNode){                                        
+                    var targetNodes = dots.getNextCandidateNodes(snapPos, startNode);                    
+                    if(targetNodes.length){
+                        for(var i = 0; i < targetNodes.length; ++i){
+                            var snap = new THREE.Mesh( circleStrokeGeometry, circleMaterial );                
+                            snap.rotation.x = -Math.PI/2;
+                            snap.position.x = targetNodes[i][0][0].x;
+                            snap.position.y = targetNodes[i][0][0].y;
+                            snap.position.z = targetNodes[i][0][0].z;                            
+                            scene.add(snap);
+                            targets.push(snap);
+                        }
+                    }
+                }
                 break;                
         }        
     }
@@ -384,6 +407,7 @@
 
             if(!mouseDown){
 
+                /*
                 var nearestNodePair = dots.nearestNodePair(snapPos, pos);
                 if(nearestNodePair){
                     if(!circleStroke1){
@@ -422,24 +446,23 @@
                     scene.remove(circleStroke2);
                     circleStroke2 = null;
                 }
-
-                /*
-                var nearestNode = dots.nearestNode(snapPos, pos);
-                if(nearestNode){
+                */
+                
+                nearestNode = dots.nearestNode(snapPos, pos);
+                if(nearestNode){                    
                     if(!circleStroke1){
                         circleStroke1 = new THREE.Mesh( circleStrokeGeometry, circleMaterial );                
                         circleStroke1.rotation.x = -Math.PI/2;
                         scene.add(circleStroke1);
                     }
                     circleStroke1.position.x = nearestNode.x;
-                    circleStroke1.position.z = nearestNode.z;
+                    circleStroke1.position.z = nearestNode.z;                                        
                 }
                 else{
                     scene.remove(circleStroke1);
                     circleStroke1 = null;
-                }
-                */
-                /*
+                }                
+                
                 if(dots.dotExists(snapPos)){               
                     if(!circleHighlight){
                         circleHighlight = new THREE.Mesh( circleGeometry, circleHighlightMaterial );                
@@ -452,10 +475,13 @@
                 else{                    
                     scene.remove(circleHighlight);
                     circleHighlight = null;
-                } 
-                */                            
+                }                 
             }            
-            else{                            
+            else{      
+                // mouse down                      
+
+                
+                
             }            
         }                
     }
@@ -477,7 +503,14 @@
                 }
                 snapPos = null;         
             }
-        }                        
+        }    
+        else if(actionState == actionStates.DASH){
+            if(targets.length){
+                targets.forEach(function(t){
+                    scene.remove(t);
+                });                        
+            }
+        }                    
     }
 
     function onMouseWheel(event){                        

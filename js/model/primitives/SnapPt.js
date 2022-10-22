@@ -11,4 +11,5 @@ var SnapPt = function(x, y, z, type, direction){
     this.z = z;
     this.type = type;
     this.direction = direction;
+    this.position = new THREE.Vector3(x,y,z);
 }
