@@ -349,7 +349,7 @@
                     var targetNodes = dots.getNextCandidateNodes(snapPos, startNode);                    
                     if(targetNodes.length){
                         for(var i = 0; i < targetNodes.length; ++i){
-                            var snap = new THREE.Mesh( circleStrokeGeometry, circleMaterial );                
+                            var snap = new THREE.Mesh( circleStrokeGeometry, circleHighlightMaterial );                
                             snap.rotation.x = -Math.PI/2;
                             snap.position.x = targetNodes[i][0][0].x;
                             snap.position.y = targetNodes[i][0][0].y;
