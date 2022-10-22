@@ -130,7 +130,10 @@
         };
         const grid = new THREE.InfiniteGridHelper(1, 10, new THREE.Color(color));        
         grid.material.uniforms.uColor.value.set( color.value );
-        scene.add(grid);                
+        scene.add(grid);              
+        
+        initDots();
+        setActionStateDash();
         
         render();
     }                    
@@ -293,6 +296,30 @@
         controls.update();                 
     };    
 
+    var snapPos = null;
+    const circleGeometry = new THREE.CircleGeometry( 0.08, 32 );
+    const circleMaterial = new THREE.MeshBasicMaterial( { color: 0x888888 } );    
+    const circleHighlightMaterial = new THREE.MeshBasicMaterial( { color: 0x880000 } );    
+    var circle = null;        
+    var circleHighlight = null;
+
+    const circleStrokeGeometry = new THREE.CircleGeometry( 0.04, 32 );
+    var circleStroke1 = null;
+    var circleStroke2 = null;        
+    var stroke = null;
+
+    function initDots(){
+        for(var i = -2; i <= 2; ++i){
+            for(var j = -2; j <= 2; ++j){
+                var dot = dots.addDot(new THREE.Vector3(i, 0, j));
+                if(dot){
+                    scene.add(dot);
+                }
+            }
+        }
+    }
+
+
     // mouse events    
     var dragged = false;
     function down(event, x, y)
@@ -312,44 +339,7 @@
                 break;                
         }        
     }
-
-    
-    var snapPos = null;
-    const circleGeometry = new THREE.CircleGeometry( 0.08, 32 );
-    const circleMaterial = new THREE.MeshBasicMaterial( { color: 0x888888 } );    
-    const circleHighlightMaterial = new THREE.MeshBasicMaterial( { color: 0x880000 } );    
-    var circle = null;        
-    var circleHighlight = null;
-
-    const circleStrokeGeometry = new THREE.CircleGeometry( 0.04, 32 );
-    var circleStroke1 = null;
-    var circleStroke2 = null;
-
-    /*
-    const linePts = [
-        new THREE.Vector3(-0.075, 0, 0),
-        new THREE.Vector3(0.075, 0, 0 )
-    ];
-    const line1Geometry = new THREE.BufferGeometry().setFromPoints(linePts);
-    const line2Geometry = new THREE.BufferGeometry().setFromPoints(linePts);
-    const lineMaterial = new THREE.LineBasicMaterial( { color: 0x333333 } );
-    var snapLine1 = new THREE.Line(line1Geometry, lineMaterial);                    
-    snapLine1.rotation.y = Math.PI/4;
-    var snapLine2 = new THREE.Line(line2Geometry, lineMaterial);                    
-    snapLine2.rotation.y = -Math.PI/4;
-    var cross = null;
-    */
-
-    var dashPoints = [
-        new THREE.Vector3(0.5, 0, 0.5),
-        new THREE.Vector3(-0.5, 0, 0.5),
-        new THREE.Vector3(-0.5, 0, -0.5),
-        new THREE.Vector3(-0.5, 0, 0.5),
-    ];
-
-
-    var stroke = null;
-
+        
     function move(event, x, y) {       
                 
         if(lastMousePos){            
@@ -411,11 +401,7 @@
                     }
                     circleStroke2.position.x = nearestNodePair[1].x;
                     circleStroke2.position.z = nearestNodePair[1].z;
-
-                    //console.log(nearestNodePair[0].type + " to " + nearestNodePair[1].type);
-                    //console.log(nearestNodePair[0].direction + " to " + nearestNodePair[1].direction);
-                    //console.log("~~~")
-
+                    
                     if(stroke){
                         scene2.remove(stroke);
                         stroke = null;
