@@ -301,7 +301,7 @@ Dots.prototype.getNextCandidateNodes = function(dotPos, node){
     for(var i = 0; i < candidates.length; ++i){
         var nearest = this.nodesKdTree.nearest(candidates[i], 1, 0) ;
         if(nearest && nearest[0][1] == 0)
-            candidateNodes.push(nearest);
+            candidateNodes.push(nearest[0][0]);
     }        
     
 

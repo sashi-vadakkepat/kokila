@@ -309,6 +309,7 @@
     var stroke = null;    
 
     var targets = [];
+    var targetNodes = null;
     var startNode = null;
 
     function initDots(){
@@ -346,14 +347,14 @@
                 }
 
                 if(startNode){                                        
-                    var targetNodes = dots.getNextCandidateNodes(snapPos, startNode);                    
+                    targetNodes = dots.getNextCandidateNodes(snapPos, startNode);                    
                     if(targetNodes.length){
                         for(var i = 0; i < targetNodes.length; ++i){
-                            var snap = new THREE.Mesh( circleStrokeGeometry, circleHighlightMaterial );                
+                            var snap = new THREE.Mesh( circleStrokeGeometry, circleMaterial );                
                             snap.rotation.x = -Math.PI/2;
-                            snap.position.x = targetNodes[i][0][0].x;
-                            snap.position.y = targetNodes[i][0][0].y;
-                            snap.position.z = targetNodes[i][0][0].z;                            
+                            snap.position.x = targetNodes[i].x;
+                            snap.position.y = targetNodes[i].y;
+                            snap.position.z = targetNodes[i].z;                            
                             scene.add(snap);
                             targets.push(snap);
                         }
@@ -376,13 +377,13 @@
         var high = new THREE.Vector3(Math.ceil(pos.x), 0, Math.ceil(pos.z));            
 
         var baryX = 1.0 - (high.x - pos.x);
-        var baryZ = 1.0 - (high.z - pos.z);
-        snapPos = new THREE.Vector3();        
-        snapPos.x = baryX > 0.5 ? high.x : low.x;
-        snapPos.z = baryZ > 0.5 ? high.z : low.z;
+        var baryZ = 1.0 - (high.z - pos.z);        
 
         // dot
         if(actionState == actionStates.DOT){            
+            snapPos = new THREE.Vector3();        
+            snapPos.x = baryX > 0.5 ? high.x : low.x;
+            snapPos.z = baryZ > 0.5 ? high.z : low.z;
                        
             if(!mouseDown){
                 if(!circle){
@@ -405,48 +406,11 @@
         }
         else if(actionState == actionStates.DASH){       
 
-            if(!mouseDown){
+            if(!mouseDown){                
 
-                /*
-                var nearestNodePair = dots.nearestNodePair(snapPos, pos);
-                if(nearestNodePair){
-                    if(!circleStroke1){
-                        circleStroke1 = new THREE.Mesh( circleStrokeGeometry, circleMaterial );                
-                        circleStroke1.rotation.x = -Math.PI/2;
-                        scene.add(circleStroke1);
-                    }
-                    circleStroke1.position.x = nearestNodePair[0].x;
-                    circleStroke1.position.z = nearestNodePair[0].z;                    
-
-                    if(!circleStroke2){
-                        circleStroke2 = new THREE.Mesh( circleStrokeGeometry, circleMaterial );                
-                        circleStroke2.rotation.x = -Math.PI/2;
-                        scene.add(circleStroke2);
-                    }
-                    circleStroke2.position.x = nearestNodePair[1].x;
-                    circleStroke2.position.z = nearestNodePair[1].z;
-                    
-                    if(stroke){
-                        scene2.remove(stroke);
-                        stroke = null;
-                    }
-                    var pos1 = new THREE.Vector3(nearestNodePair[0].x, nearestNodePair[0].y, nearestNodePair[0].z);
-                    var pos2 = new THREE.Vector3(nearestNodePair[1].x, nearestNodePair[1].y, nearestNodePair[1].z);
-                    stroke = dots.getStroke(snapPos, 
-                                    pos1, nearestNodePair[0].type, nearestNodePair[0].direction,
-                                    pos2, nearestNodePair[1].type, nearestNodePair[1].direction
-                                );                    
-                    if(stroke)
-                        scene2.add(stroke);
-                }
-                else{
-                    scene.remove(circleStroke1);
-                    circleStroke1 = null;
-
-                    scene.remove(circleStroke2);
-                    circleStroke2 = null;
-                }
-                */
+                snapPos = new THREE.Vector3();        
+                snapPos.x = baryX > 0.5 ? high.x : low.x;
+                snapPos.z = baryZ > 0.5 ? high.z : low.z;
                 
                 nearestNode = dots.nearestNode(snapPos, pos);
                 if(nearestNode){                    
@@ -480,7 +444,32 @@
             else{      
                 // mouse down                      
 
-                
+                if(startNode){
+
+                    if(targetNodes && targetNodes.length){
+                        var minNode = null;
+                        var minDistance = Infinity;
+                        for(var i = 0; i < targetNodes.length; ++i){
+                            var targetPos = targetNodes[i].position;       
+                            var dist = targetPos.distanceTo(pos);
+                            if(dist < minDistance){
+                                minNode = targetNodes[i];
+                                minDistance = dist;
+                            }
+                        }            
+                        
+                        if(stroke){
+                            scene2.remove(stroke);
+                            stroke = null;
+                        }
+                        stroke = dots.getStroke(snapPos, 
+                                        startNode.position, startNode.type, startNode.direction,
+                                        minNode.position, minNode.type, minNode.direction
+                                    );                    
+                        if(stroke)
+                            scene2.add(stroke);
+                    }
+                }
                 
             }            
         }                
@@ -510,6 +499,7 @@
                     scene.remove(t);
                 });                        
             }
+            targetNodes = null;
         }                    
     }
 
