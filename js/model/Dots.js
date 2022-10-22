@@ -177,26 +177,7 @@ Dots.createArcGeometry = function(){
     );
     Dots.gNorth = new THREE.BufferGeometry().setFromPoints(
         new THREE.Path().absarc(0, 0, Dots.Radius, 5* Math.PI/4, -Math.PI/4).getSpacedPoints(Dots.ArcRes)
-    );
-
-    /*    
-    let lEast = new THREE.Line(gEast, m);
-    lEast.rotation.x = Math.PI/2;        
-    let lSouth = new THREE.Line(gSouth, m);
-    lSouth.rotation.x = Math.PI/2;        
-    let lWest = new THREE.Line(gWest, m);
-    lWest.rotation.x = Math.PI/2;        
-    let lNorth = new THREE.Line(gNorth, m);
-    lNorth.rotation.x = Math.PI/2;        
-
-    let circle = new THREE.Object3D();
-    circle.add(lEast);
-    circle.add(lSouth);
-    circle.add(lWest);
-    circle.add(lNorth);
-
-    return circle;
-    */
+    );    
 }
 
 Dots.StrokeMaterial = new THREE.LineBasicMaterial({color: "black"});
