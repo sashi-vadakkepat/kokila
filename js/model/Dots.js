@@ -249,7 +249,7 @@ Dots.prototype.getNext = function(prev, curr){
     
 }
 
-Dots.prototype.getNextCandidateNodes = function(dotPos, node){    
+Dots.prototype.getNextCandidateNodes = function(dotPos, node, prevNode){    
     var candidates = [];   
     if(node.type == 'mid'){
         var se = new THREE.Vector3(dotPos.x + 0.25, 0, dotPos.z + 0.25);
@@ -262,42 +262,117 @@ Dots.prototype.getNextCandidateNodes = function(dotPos, node){
         var w = new THREE.Vector3(dotPos.x - 0.5, 0, dotPos.z);
         var s = new THREE.Vector3(dotPos.x, 0, dotPos.z + 0.5);
 
-        
-        switch(node.direction){
-            case 'se':
-                candidates.push(ne);
-                candidates.push(sw);
-                candidates.push(s);
-                candidates.push(e);
-                break;
-            case 'ne':
-                candidates.push(nw);
-                candidates.push(se);
-                candidates.push(n);
-                candidates.push(e);
-                break;
-            case 'nw':
-                candidates.push(sw);
-                candidates.push(ne);
-                candidates.push(n);
-                candidates.push(w);
-                break;
-            case 'sw':
-                candidates.push(nw);
-                candidates.push(se);
-                candidates.push(s);
-                candidates.push(w);
-                break;
+        if(!prevNode){
+            switch(node.direction){
+                case 'se':
+                    candidates.push(ne);
+                    candidates.push(sw);
+                    candidates.push(s);
+                    candidates.push(e);
+                    break;
+                case 'ne':
+                    candidates.push(nw);
+                    candidates.push(se);
+                    candidates.push(n);
+                    candidates.push(e);
+                    break;
+                case 'nw':
+                    candidates.push(sw);
+                    candidates.push(ne);
+                    candidates.push(n);
+                    candidates.push(w);
+                    break;
+                case 'sw':
+                    candidates.push(nw);
+                    candidates.push(se);
+                    candidates.push(s);
+                    candidates.push(w);
+                    break;
+            }  
+        }      
+        else{
+            if(prevNode.type == "mid"){
+                // mid to mid
+                switch(node.direction){
+                    case 'se':
+                        if(prevNode.direction == 'ne'){
+                            candidates.push(sw);                        
+                            candidates.push(s);                        
+                        }
+                        else if(prevNode.direction == 'sw'){
+                            candidates.push(ne);                        
+                            candidates.push(n);                        
+                        }
+                        break;
+                    case 'ne':
+                        if(prevNode.direction == 'se'){
+                            candidates.push(nw);                        
+                            candidates.push(n);                        
+                        }
+                        else if(prevNode.direction == 'nw'){
+                            candidates.push(se);                        
+                            candidates.push(e);                        
+                        }
+                        break;
+                    case 'nw':
+                        if(prevNode.direction == 'ne'){
+                            candidates.push(sw);                        
+                            candidates.push(w);                        
+                        }
+                        else if(prevNode.direction == 'sw'){
+                            candidates.push(ne);                        
+                            candidates.push(n);                        
+                        }
+                        break;
+                    case 'sw':
+                        if(prevNode.direction == 'nw'){
+                            candidates.push(se);                        
+                            candidates.push(s);                        
+                        }
+                        else if(prevNode.direction == 'se'){
+                            candidates.push(nw);                        
+                            candidates.push(w);                        
+                        }
+                        break;
+                }  
+            }
+            else{
+                // jct to mid
+
+            }
         }     
     }
-    else if(node.type == 'jct'){        
-        candidates.push(new THREE.Vector3(node.x + 0.25, 0, node.z + 0.25));
-        candidates.push(new THREE.Vector3(node.x + 0.25, 0, node.z - 0.25));
-        candidates.push(new THREE.Vector3(node.x - 0.25, 0, node.z - 0.25));
-        candidates.push(new THREE.Vector3(node.x - 0.25, 0, node.z + 0.25));
-        
-    }
+    else if(node.type == 'jct'){                                       
 
+        if(!prevNode){            
+            var se = new THREE.Vector3(node.x + 0.25, 0, node.z + 0.25);
+            var ne = new THREE.Vector3(node.x + 0.25, 0, node.z - 0.25);
+            var nw = new THREE.Vector3(node.x - 0.25, 0, node.z - 0.25);
+            var sw = new THREE.Vector3(node.x - 0.25, 0, node.z + 0.25);
+            candidates.push(se);
+            candidates.push(ne);
+            candidates.push(nw);
+            candidates.push(sw);
+        }
+        else{
+            var dirs = [];
+            dirs.push(new THREE.Vector3(+0.25, 0, +0.25));
+            dirs.push(new THREE.Vector3(+0.25, 0, -0.25));
+            dirs.push(new THREE.Vector3(-0.25, 0, -0.25));
+            dirs.push(new THREE.Vector3(-0.25, 0, +0.25));
+            var dir = new THREE.Vector3(prevNode.x - node.x, 0, prevNode.z - node.z);            
+            
+            var found = false;
+            for(var i = 0; i < dirs.length && !found; ++i){                
+                var dot = dir.dot(dirs[i]);
+                if(dot && dot < 0){
+                    candidates.push(new THREE.Vector3(node.x + dirs[i].x, 0, node.z + dirs[i].z));
+                    found = true;
+                }
+            }
+        }        
+    }
+    
     var candidateNodes = [];
     for(var i = 0; i < candidates.length; ++i){
         var nearest = this.nodesKdTree.nearest(candidates[i], 1, 0) ;

@@ -311,6 +311,7 @@
     var targets = [];
     var targetNodes = null;
     var startNode = null;
+    var prevNode = null;
 
     function initDots(){
         for(var i = -2; i <= 2; ++i){
@@ -353,7 +354,7 @@
         }
 
         if(startNode){                                        
-            targetNodes = dots.getNextCandidateNodes(snapPos, startNode);                    
+            targetNodes = dots.getNextCandidateNodes(snapPos, startNode, prevNode);                    
             if(targetNodes.length){
                 for(var i = 0; i < targetNodes.length; ++i){
                     var snap = new THREE.Mesh( circleStrokeGeometry, circleMaterial );                
@@ -477,6 +478,7 @@
                     
                         if(minDistance < 0.1){                            
                             stroke.material = Dots.StrokeMaterial;
+                            prevNode = startNode;
                             startNode = minNode;
                             stroke = null;
                             updateStartNode();
