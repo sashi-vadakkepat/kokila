@@ -180,13 +180,14 @@ Dots.createArcGeometry = function(){
     );    
 }
 
-Dots.StrokeMaterial = new THREE.LineBasicMaterial({color: "black"});
+Dots.StrokePreviewMaterial = new THREE.LineBasicMaterial({color: 0x5555aa});
+Dots.StrokeMaterial = new THREE.LineBasicMaterial({color: 0x000000});
 
 Dots.prototype.getStroke = function(pos, pos1, type1, dir1, pos2, type2, dir2){
     if(type1 == "jct" || type2 == "jct"){
         const linePts = [ pos1, pos2 ];
         const lineGeometry = new THREE.BufferGeometry().setFromPoints(linePts);
-        var line = new THREE.Line(lineGeometry, Dots.StrokeMaterial);                            
+        var line = new THREE.Line(lineGeometry, Dots.StrokePreviewMaterial);                            
         return line;
     }
     else{
@@ -194,41 +195,41 @@ Dots.prototype.getStroke = function(pos, pos1, type1, dir1, pos2, type2, dir2){
         if(dir1 == "se"){
             if(dir2 == "ne"){
                 // east
-                arc = new THREE.Line(Dots.gEast, Dots.StrokeMaterial);
+                arc = new THREE.Line(Dots.gEast, Dots.StrokePreviewMaterial);
             }
             else if(dir2 == "sw"){
                 // south
-                arc = new THREE.Line(Dots.gSouth, Dots.StrokeMaterial);
+                arc = new THREE.Line(Dots.gSouth, Dots.StrokePreviewMaterial);
             }
         }
         else if(dir1 == "ne"){
             if(dir2 == "se"){
                 // east
-                arc = new THREE.Line(Dots.gEast, Dots.StrokeMaterial);
+                arc = new THREE.Line(Dots.gEast, Dots.StrokePreviewMaterial);
             }
             else if(dir2 == "nw"){
                 // north
-                arc = new THREE.Line(Dots.gNorth, Dots.StrokeMaterial);
+                arc = new THREE.Line(Dots.gNorth, Dots.StrokePreviewMaterial);
             }
         }
         else if(dir1 == "nw"){
             if(dir2 == "ne"){
                 // north
-                arc = new THREE.Line(Dots.gNorth, Dots.StrokeMaterial);
+                arc = new THREE.Line(Dots.gNorth, Dots.StrokePreviewMaterial);
             }
             else if(dir2 == "sw"){
                 // west
-                arc = new THREE.Line(Dots.gWest, Dots.StrokeMaterial);
+                arc = new THREE.Line(Dots.gWest, Dots.StrokePreviewMaterial);
             }
         }
         else if(dir1 == "sw"){
             if(dir2 == "nw"){
                 // west
-                arc = new THREE.Line(Dots.gWest, Dots.StrokeMaterial);
+                arc = new THREE.Line(Dots.gWest, Dots.StrokePreviewMaterial);
             }
             else if(dir2 == "se"){
                 // south
-                arc = new THREE.Line(Dots.gSouth, Dots.StrokeMaterial);
+                arc = new THREE.Line(Dots.gSouth, Dots.StrokePreviewMaterial);
             }
         }
 

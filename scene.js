@@ -339,30 +339,36 @@
             case actionStates.DASH:      
                 if(stroke)
                     stroke = null;    
-                startNode = nearestNode;      
-                if(targets.length){
-                    targets.forEach(function(t){
-                        scene.remove(t);
-                    });                        
-                }
-
-                if(startNode){                                        
-                    targetNodes = dots.getNextCandidateNodes(snapPos, startNode);                    
-                    if(targetNodes.length){
-                        for(var i = 0; i < targetNodes.length; ++i){
-                            var snap = new THREE.Mesh( circleStrokeGeometry, circleMaterial );                
-                            snap.rotation.x = -Math.PI/2;
-                            snap.position.x = targetNodes[i].x;
-                            snap.position.y = targetNodes[i].y;
-                            snap.position.z = targetNodes[i].z;                            
-                            scene.add(snap);
-                            targets.push(snap);
-                        }
-                    }
-                }
+                startNode = nearestNode;
+                updateStartNode();
                 break;                
         }        
     }
+
+    function updateStartNode(){        
+        if(targets.length){
+            targets.forEach(function(t){
+                scene.remove(t);
+            });                        
+        }
+
+        if(startNode){                                        
+            targetNodes = dots.getNextCandidateNodes(snapPos, startNode);                    
+            if(targetNodes.length){
+                for(var i = 0; i < targetNodes.length; ++i){
+                    var snap = new THREE.Mesh( circleStrokeGeometry, circleMaterial );                
+                    snap.rotation.x = -Math.PI/2;
+                    snap.position.x = targetNodes[i].x;
+                    snap.position.y = targetNodes[i].y;
+                    snap.position.z = targetNodes[i].z;                            
+                    scene.add(snap);
+                    targets.push(snap);
+                }
+            }
+        };
+    }
+
+    
         
     function move(event, x, y) {       
                 
@@ -406,11 +412,11 @@
         }
         else if(actionState == actionStates.DASH){       
 
-            if(!mouseDown){                
+            snapPos = new THREE.Vector3();        
+            snapPos.x = baryX > 0.5 ? high.x : low.x;
+            snapPos.z = baryZ > 0.5 ? high.z : low.z;
 
-                snapPos = new THREE.Vector3();        
-                snapPos.x = baryX > 0.5 ? high.x : low.x;
-                snapPos.z = baryZ > 0.5 ? high.z : low.z;
+            if(!mouseDown){                                
                 
                 nearestNode = dots.nearestNode(snapPos, pos);
                 if(nearestNode){                    
@@ -468,6 +474,14 @@
                                     );                    
                         if(stroke)
                             scene2.add(stroke);
+                    
+                        if(minDistance < 0.1){                            
+                            stroke.material = Dots.StrokeMaterial;
+                            startNode = minNode;
+                            stroke = null;
+                            updateStartNode();
+                        }
+                        
                     }
                 }
                 
