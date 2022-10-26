@@ -95,8 +95,8 @@ Dots.prototype.dotExists = function(pos){
     return false;
 }
 
-Dots.prototype.nearestNode = function(snapPos, pos){
-    if(this.dotExists(snapPos)){
+Dots.prototype.nearestNode = function(dotPos, pos){
+    if(this.dotExists(dotPos)){
         var nearest = this.nodesKdTree.nearest(pos, 1, 1);
         if(nearest)
             return nearest[0][0];
@@ -405,9 +405,60 @@ Dots.prototype.getNextCandidateNodes = function(dotPos, node, prevNode){
     var candidateNodes = [];
     for(var i = 0; i < candidates.length; ++i){
         var nearest = this.nodesKdTree.nearest(candidates[i], 1, 0) ;
-        if(nearest && nearest[0][1] == 0)
+        if(nearest && nearest[0][1] == 0 && nearest[0][0].crossings)
             candidateNodes.push(nearest[0][0]);
     }             
 
     return candidateNodes;
+}
+
+Dots.zeroJctCrossings = function(node){
+    if(node && node.type == 'jct')
+        node.crossings = 0;
+}
+
+
+Dots.prototype.updateCrossings = function(dotPos, startNode, endNode){
+
+    var e = this.nearestNode(dotPos, new THREE.Vector3(dotPos.x + 0.5, 0, dotPos.z));
+    var n = this.nearestNode(dotPos, new THREE.Vector3(dotPos.x, 0, dotPos.z - 0.5));
+    var w = this.nearestNode(dotPos, new THREE.Vector3(dotPos.x - 0.5, 0, dotPos.z));
+    var s = this.nearestNode(dotPos, new THREE.Vector3(dotPos.x, 0, dotPos.z + 0.5));
+
+    startNode.crossings--;
+    endNode.crossings--;
+    if(startNode.type == 'mid' && endNode.type == 'mid'){
+        if(startNode.direction == 'se'){  
+            if(endNode.direction == 'ne'){
+                Dots.zeroJctCrossings(e);
+            }   
+            else if(endNode.direction == 'sw'){
+                Dots.zeroJctCrossings(s);
+            }       
+        }
+        else if(startNode.direction == 'ne'){            
+            if(endNode.direction == 'se'){
+                Dots.zeroJctCrossings(e);
+            }   
+            else if(endNode.direction == 'nw'){
+                Dots.zeroJctCrossings(n);
+            }       
+        }
+        else if(startNode.direction == 'nw'){            
+            if(endNode.direction == 'ne'){
+                Dots.zeroJctCrossings(n);
+            }   
+            else if(endNode.direction == 'sw'){
+                Dots.zeroJctCrossings(w);
+            }       
+        }
+        else if(startNode.direction == 'sw'){            
+            if(endNode.direction == 'nw'){
+                Dots.zeroJctCrossings(w);
+            }   
+            else if(endNode.direction == 'se'){
+                Dots.zeroJctCrossings(s);
+            }       
+        }
+    }
 }

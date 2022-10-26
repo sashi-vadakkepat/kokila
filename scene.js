@@ -420,7 +420,7 @@
             if(!mouseDown){                                
                 
                 nearestNode = dots.nearestNode(snapPos, pos);
-                if(nearestNode){                    
+                if(nearestNode && nearestNode.crossings){                    
                     if(!circleStroke1){
                         circleStroke1 = new THREE.Mesh( circleStrokeGeometry, circleMaterial );                
                         circleStroke1.rotation.x = -Math.PI/2;
@@ -478,6 +478,7 @@
                     
                         if(minDistance < 0.1){                            
                             stroke.material = Dots.StrokeMaterial;
+                            dots.updateCrossings(snapPos, startNode, minNode);                            
                             prevNode = startNode;
                             startNode = minNode;
                             stroke = null;
