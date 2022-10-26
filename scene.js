@@ -516,6 +516,7 @@
                 });                        
             }
             targetNodes = null;
+            startNode = prevNode = null;
         }                    
     }
 

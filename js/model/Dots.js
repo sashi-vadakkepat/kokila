@@ -301,7 +301,7 @@ Dots.prototype.getNextCandidateNodes = function(dotPos, node, prevNode){
                         }
                         else if(prevNode.direction == 'sw'){
                             candidates.push(ne);                        
-                            candidates.push(n);                        
+                            candidates.push(e);                        
                         }
                         break;
                     case 'ne':
@@ -337,8 +337,37 @@ Dots.prototype.getNextCandidateNodes = function(dotPos, node, prevNode){
                 }  
             }
             else{
-                // jct to mid
-
+                // jct to mid                
+                var dir = new THREE.Vector3(node.x - prevNode.x, 0, node.z - prevNode.z);            
+                var next = new THREE.Vector3(node.x + dir.x, 0, node.z + dir.z);
+                candidates.push(next);
+                
+                switch(node.direction){
+                    case 'se':
+                        if(next.distanceTo(ne) < next.distanceTo(sw))
+                            candidates.push(ne);
+                        else
+                            candidates.push(sw);                        
+                        break;
+                    case 'ne':
+                        if(next.distanceTo(nw) < next.distanceTo(se))
+                            candidates.push(nw);
+                        else
+                            candidates.push(se);                        
+                        break;
+                    case 'nw':
+                        if(next.distanceTo(sw) < next.distanceTo(ne))
+                            candidates.push(sw);
+                        else
+                            candidates.push(ne);                        
+                        break;
+                    case 'sw':
+                        if(next.distanceTo(nw) < next.distanceTo(se))
+                            candidates.push(nw);
+                        else
+                            candidates.push(se);                        
+                        break;
+                }
             }
         }     
     }
@@ -378,8 +407,7 @@ Dots.prototype.getNextCandidateNodes = function(dotPos, node, prevNode){
         var nearest = this.nodesKdTree.nearest(candidates[i], 1, 0) ;
         if(nearest && nearest[0][1] == 0)
             candidateNodes.push(nearest[0][0]);
-    }        
-    
+    }             
 
     return candidateNodes;
 }
