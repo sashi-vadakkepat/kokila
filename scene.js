@@ -434,7 +434,7 @@
                     circleStroke1 = null;
                 }                
                 
-                if(dots.dotExists(snapPos)){               
+                if(dots.dotExists(snapPos)){
                     if(!circleHighlight){
                         circleHighlight = new THREE.Mesh( circleGeometry, circleHighlightMaterial );                
                         circleHighlight.rotation.x = -Math.PI/2;
@@ -451,7 +451,7 @@
             else{      
                 // mouse down                      
 
-                if(startNode){
+                if(startNode && dots.dotExists(snapPos)){
 
                     if(targetNodes && targetNodes.length){
                         var minNode = null;
@@ -469,7 +469,7 @@
                             scene2.remove(stroke);
                             stroke = null;
                         }
-                        stroke = dots.getStroke(snapPos, 
+                        stroke = dots.getStroke(snapPos, pos,
                                         startNode.position, startNode.type, startNode.direction,
                                         minNode.position, minNode.type, minNode.direction
                                     );                    

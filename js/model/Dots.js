@@ -167,7 +167,7 @@ Dots.ArcRes = 25;
 
 Dots.createArcGeometry = function(){
     Dots.gEast = new THREE.BufferGeometry().setFromPoints(
-        new THREE.Path().absarc(0, 0, Dots.Radius, -Math.PI/4, Math.PI/4).getSpacedPoints(Dots.ArcRes)
+        new THREE.Path().absarc(0, 0, Dots.Radius, 7 * Math.PI/4, Math.PI/4).getSpacedPoints(Dots.ArcRes)
     );
     Dots.gSouth = new THREE.BufferGeometry().setFromPoints(
         new THREE.Path().absarc(0, 0, Dots.Radius, Math.PI/4, 3 * Math.PI/4).getSpacedPoints(Dots.ArcRes)
@@ -180,63 +180,120 @@ Dots.createArcGeometry = function(){
     );    
 }
 
+Dots.createArcGeometryStartEnd = function(start, end){
+    var arc = new THREE.BufferGeometry().setFromPoints(
+        new THREE.Path().absarc(0, 0, Dots.Radius, start, end).getSpacedPoints(Dots.ArcRes)
+    );  
+    return arc;  
+}
+
+Dots.getAngle = function(dotPos, pos){
+    var base = new THREE.Vector3(1, 0, 0);
+    var vec = new THREE.Vector3().subVectors(pos, dotPos).normalize();
+    //var angle = base.angleTo(vec) * 180/Math.PI;
+
+    var dot = base.x * vec.x + base.z * vec.z;
+    var det = base.x * vec.z + base.z * vec.x;
+    var angle = Math.atan2(det, dot);        
+    return angle;
+}
+
+
 Dots.StrokePreviewMaterial = new THREE.LineBasicMaterial({color: 0x5555aa});
 Dots.StrokeMaterial = new THREE.LineBasicMaterial({color: 0x000000});
 
-Dots.prototype.getStroke = function(pos, pos1, type1, dir1, pos2, type2, dir2){
+Dots.snapAngle = function(angle, target){
+    var diff = Math.abs(target-angle);    
+    if(diff < 0.5)
+        return target;
+    else
+        return angle;
+}
+
+Dots.prototype.getStroke = function(dotPos, pos, pos1, type1, dir1, pos2, type2, dir2){
     if(type1 == "jct" || type2 == "jct"){
-        const linePts = [ pos1, pos2 ];
+
+        var line = new THREE.Line3(pos1, pos2);
+        var closestPt = new THREE.Vector3();
+        line.closestPointToPoint(pos, true, closestPt);
+        if(closestPt.distanceTo(pos2) < 0.1)
+            closestPt = pos2;
+        const linePts = [ pos1, closestPt ];
         const lineGeometry = new THREE.BufferGeometry().setFromPoints(linePts);
         var line = new THREE.Line(lineGeometry, Dots.StrokePreviewMaterial);                            
         return line;
     }
     else{
-        var arc = null;        
+        var arc = null;      
+        var start = null;
+        var end = null;
+        var angle = Dots.getAngle(dotPos, pos);        
+
         if(dir1 == "se"){
-            if(dir2 == "ne"){
+            
+            if(dir2 == "sw"){
+                // south                
+                //arc = new THREE.Line(Dots.gSouth, Dots.StrokePreviewMaterial);
+                start = Math.PI/4;
+                end = Dots.snapAngle(angle, 3 * Math.PI/4);
+            }
+            else if(dir2 == "ne"){
                 // east
-                arc = new THREE.Line(Dots.gEast, Dots.StrokePreviewMaterial);
-            }
-            else if(dir2 == "sw"){
-                // south
-                arc = new THREE.Line(Dots.gSouth, Dots.StrokePreviewMaterial);
-            }
+                //arc = new THREE.Line(Dots.gEast, Dots.StrokePreviewMaterial);                  
+                end = Math.PI/4;
+                start = Dots.snapAngle(angle, -Math.PI/4);
+            }            
         }
-        else if(dir1 == "ne"){
+        else if(dir1 == "ne"){            
             if(dir2 == "se"){
                 // east
-                arc = new THREE.Line(Dots.gEast, Dots.StrokePreviewMaterial);
+                //arc = new THREE.Line(Dots.gEast, Dots.StrokePreviewMaterial);
+                start = -Math.PI/4;
+                end = Dots.snapAngle(angle, Math.PI/4);
             }
             else if(dir2 == "nw"){
                 // north
-                arc = new THREE.Line(Dots.gNorth, Dots.StrokePreviewMaterial);
+                //arc = new THREE.Line(Dots.gNorth, Dots.StrokePreviewMaterial);
+                end = -Math.PI/4;
+                start = Dots.snapAngle(angle, -3 * Math.PI/4);
             }
         }
-        else if(dir1 == "nw"){
+        else if(dir1 == "nw"){            
             if(dir2 == "ne"){
                 // north
-                arc = new THREE.Line(Dots.gNorth, Dots.StrokePreviewMaterial);
+                //arc = new THREE.Line(Dots.gNorth, Dots.StrokePreviewMaterial);
+                start = -3 * Math.PI/4;
+                end = Dots.snapAngle(angle, -Math.PI/4);
             }
             else if(dir2 == "sw"){
                 // west
-                arc = new THREE.Line(Dots.gWest, Dots.StrokePreviewMaterial);
+                //arc = new THREE.Line(Dots.gWest, Dots.StrokePreviewMaterial);
+                end = -3 * Math.PI/4;
+                start = Dots.snapAngle(angle, 3 * Math.PI/4);
             }
         }
-        else if(dir1 == "sw"){
+        else if(dir1 == "sw"){            
             if(dir2 == "nw"){
                 // west
-                arc = new THREE.Line(Dots.gWest, Dots.StrokePreviewMaterial);
+                //arc = new THREE.Line(Dots.gWest, Dots.StrokePreviewMaterial);
+                start = 3 * Math.PI/4;
+                end = Dots.snapAngle(angle, -3 * Math.PI/4);
             }
             else if(dir2 == "se"){
                 // south
-                arc = new THREE.Line(Dots.gSouth, Dots.StrokePreviewMaterial);
+                //arc = new THREE.Line(Dots.gSouth, Dots.StrokePreviewMaterial);                
+                end = 3 * Math.PI/4;
+                start = Dots.snapAngle(angle, Math.PI/4);
             }
-        }
+        }        
+
+        var arcGeometry = Dots.createArcGeometryStartEnd(start, end);
+        arc = new THREE.Line(arcGeometry, Dots.StrokePreviewMaterial);
 
         if(arc){
-            arc.position.x = pos.x;
-            arc.position.y = pos.y;
-            arc.position.z = pos.z;
+            arc.position.x = dotPos.x;
+            arc.position.y = dotPos.y;
+            arc.position.z = dotPos.z;
 
             arc.rotation.x = Math.PI/2;        
         }
