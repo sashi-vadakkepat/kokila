@@ -238,6 +238,7 @@ Dots.prototype.getStroke = function(dotPos, pos, pos1, type1, dir1, pos2, type2,
         var start = null;
         var end = null;
         var angle = Dots.getAngle(dotPos, pos);        
+        var snapped = false;
 
         if(dir1 == "se"){
             
@@ -245,13 +246,15 @@ Dots.prototype.getStroke = function(dotPos, pos, pos1, type1, dir1, pos2, type2,
                 // south                
                 //arc = new THREE.Line(Dots.gSouth, Dots.StrokePreviewMaterial);
                 start = Math.PI/4;
-                end = Dots.snapAngle(angle, 3 * Math.PI/4).angle;
+                var next = Dots.snapAngle(angle, 3 * Math.PI/4);
+                end = next.angle;
             }
             else if(dir2 == "ne"){
                 // east
                 //arc = new THREE.Line(Dots.gEast, Dots.StrokePreviewMaterial);                  
                 end = Math.PI/4;
-                start = Dots.snapAngle(angle, -Math.PI/4).angle;
+                var next = Dots.snapAngle(angle, -Math.PI/4);
+                start = next.angle;
             }            
         }
         else if(dir1 == "ne"){            
@@ -259,13 +262,15 @@ Dots.prototype.getStroke = function(dotPos, pos, pos1, type1, dir1, pos2, type2,
                 // east
                 //arc = new THREE.Line(Dots.gEast, Dots.StrokePreviewMaterial);
                 start = -Math.PI/4;
-                end = Dots.snapAngle(angle, Math.PI/4).angle;
+                var next = Dots.snapAngle(angle, Math.PI/4);
+                end = next.angle;
             }
             else if(dir2 == "nw"){
                 // north
                 //arc = new THREE.Line(Dots.gNorth, Dots.StrokePreviewMaterial);
                 end = -Math.PI/4;
-                start = Dots.snapAngle(angle, -3 * Math.PI/4).angle;
+                var next = Dots.snapAngle(angle, -3 * Math.PI/4);
+                start = next.angle;
             }
         }
         else if(dir1 == "nw"){            
@@ -273,13 +278,15 @@ Dots.prototype.getStroke = function(dotPos, pos, pos1, type1, dir1, pos2, type2,
                 // north
                 //arc = new THREE.Line(Dots.gNorth, Dots.StrokePreviewMaterial);
                 start = -3 * Math.PI/4;
-                end = Dots.snapAngle(angle, -Math.PI/4).angle;
+                var next = Dots.snapAngle(angle, -Math.PI/4);
+                end = next.angle;
             }
             else if(dir2 == "sw"){
                 // west
                 //arc = new THREE.Line(Dots.gWest, Dots.StrokePreviewMaterial);
                 end = -3 * Math.PI/4;
-                start = Dots.snapAngle(angle, 3 * Math.PI/4).angle;
+                var next = Dots.snapAngle(angle, 3 * Math.PI/4);
+                start = next.angle;
             }
         }
         else if(dir1 == "sw"){            
@@ -287,13 +294,15 @@ Dots.prototype.getStroke = function(dotPos, pos, pos1, type1, dir1, pos2, type2,
                 // west
                 //arc = new THREE.Line(Dots.gWest, Dots.StrokePreviewMaterial);
                 start = 3 * Math.PI/4;
-                end = Dots.snapAngle(angle, -3 * Math.PI/4).angle;
+                var next = Dots.snapAngle(angle, -3 * Math.PI/4);
+                end = next.angle;
             }
             else if(dir2 == "se"){
                 // south
                 //arc = new THREE.Line(Dots.gSouth, Dots.StrokePreviewMaterial);                
                 end = 3 * Math.PI/4;
-                start = Dots.snapAngle(angle, Math.PI/4).angle;
+                var next = Dots.snapAngle(angle, Math.PI/4);
+                start = next.angle;
             }
         }        
 
