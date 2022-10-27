@@ -301,11 +301,6 @@ Dots.prototype.getStroke = function(dotPos, pos, pos1, type1, dir1, pos2, type2,
     }    
 }
 
-Dots.prototype.getNext = function(prev, curr){
-    var next = [];
-    
-}
-
 Dots.prototype.getNextCandidateNodes = function(dotPos, node, prevNode){    
     var candidates = [];   
     if(node.type == 'mid'){
