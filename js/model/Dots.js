@@ -8,7 +8,7 @@
 var Dots = function(){
     this.dots = [];
     this.dotsKdTree = new kdTree([], Dots.distanceFn, ["x", "z"]);    
-    //this.nodesKdTree = new kdTree([], Dots.distanceFn, ["x", "z"]);
+    this.nodesKdTree = new kdTree([], Dots.distanceFn, ["x", "z"]);
 
     Dots.createArcGeometry();
 }
@@ -79,6 +79,8 @@ Dots.prototype.addDot = function(pos){
         cell.add(line4);        
 
         cell.add(dot);
+
+        this.addNode(dot.position);
 
         return cell;
     }
@@ -158,6 +160,7 @@ Dots.prototype.addNode = function(pos){
     }
 }
 
+/*
 Dots.prototype.setupNodes = function(){
     var dots = this;
     this.nodesKdTree = new kdTree([], Dots.distanceFn, ["x", "z"]);    
@@ -165,6 +168,7 @@ Dots.prototype.setupNodes = function(){
         dots.addNode(dot.position);        
     });
 }
+*/
 
 Dots.Radius = Math.sqrt(0.25 * 0.25 + 0.25 * 0.25);
 Dots.ArcRes = 25;

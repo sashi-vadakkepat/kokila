@@ -591,8 +591,7 @@
     }
     
     function setActionStateDash(){        
-        setActionStateHelper(actionStates.DASH, false);           
-        dots.setupNodes();     
+        setActionStateHelper(actionStates.DASH, false);                   
     }
         
     function setActionStateHelper(state){         
