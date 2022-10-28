@@ -127,7 +127,7 @@ Dots.prototype.addNode = function(pos){
     if(dots.dotExists(east)){            
         east.x -= 0.5;
         var nearest = nodesKdTree.nearest(east, 1, 1);
-        if(nearest && nearest[0][1] != 0){                
+        if(nearest && nearest[0][1] != 0){
             nodesKdTree.insert(new SnapPt(east.x, east.y, east.z, "jct"));                
         }
     }
@@ -136,7 +136,7 @@ Dots.prototype.addNode = function(pos){
     if(dots.dotExists(north)){            
         north.z += 0.5;
         var nearest = nodesKdTree.nearest(north, 1, 1);
-        if(nearest && nearest[0][1] != 0){                
+        if(nearest && nearest[0][1] != 0){
             nodesKdTree.insert(new SnapPt(north.x, north.y, north.z, "jct"));                
         }
     }
@@ -145,7 +145,7 @@ Dots.prototype.addNode = function(pos){
     if(dots.dotExists(west)){
         west.x += 0.5;            
         var nearest = nodesKdTree.nearest(west, 1, 1);
-        if(nearest && nearest[0][1] != 0){                
+        if(nearest && nearest[0][1] != 0){
             nodesKdTree.insert(new SnapPt(west.x, west.y, west.z, "jct"));                
         }
     }
@@ -154,7 +154,7 @@ Dots.prototype.addNode = function(pos){
     if(dots.dotExists(south)){            
         south.z -= 0.5;
         var nearest = nodesKdTree.nearest(south, 1, 1);
-        if(nearest && nearest[0][1] != 0){                
+        if(nearest && nearest[0][1] != 0){
             nodesKdTree.insert(new SnapPt(south.x, south.y, south.z, "jct"));                
         }
     }
