@@ -209,7 +209,7 @@ Dots.snapAngle = function(angle, target){
         snapped: false
     }
 
-    if(diff < 0.5){
+    if(diff < 0.4){
         ret.angle = target;
         ret.snapped = true;        
     }
@@ -251,7 +251,7 @@ Dots.prototype.getStroke = function(dotPos, pos, pos1, type1, dir1, pos2, type2,
         var line = new THREE.Line3(pos1, pos2);
         var closestPt = new THREE.Vector3();
         line.closestPointToPoint(pos, true, closestPt);
-        if(closestPt.distanceTo(pos2) < 0.01){
+        if(closestPt.distanceTo(pos2) == 0){
             closestPt = pos2;
             ret.snapped = true;
         }
