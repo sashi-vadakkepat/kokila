@@ -113,52 +113,56 @@ Dots.prototype.nearestNodePair = function(snapPos, pos){
     return null;
 }
 
+Dots.prototype.addNode = function(pos){
+    var nodesKdTree = this.nodesKdTree;        
+    
+    nodesKdTree.insert(new SnapPt(pos.x + 0.25, 0, pos.z + 0.25, "mid", "se"));
+    nodesKdTree.insert(new SnapPt(pos.x + 0.25, 0, pos.z - 0.25, "mid", "ne"));
+    nodesKdTree.insert(new SnapPt(pos.x - 0.25, 0, pos.z - 0.25, "mid", "nw"));
+    nodesKdTree.insert(new SnapPt(pos.x - 0.25, 0, pos.z + 0.25, "mid", "sw"));
+
+    var east = new THREE.Vector3(pos.x + 1, 0, pos.z);
+    if(dots.dotExists(east)){            
+        east.x -= 0.5;
+        var nearest = nodesKdTree.nearest(east, 1, 1);
+        if(nearest && nearest[0][1] != 0){                
+            nodesKdTree.insert(new SnapPt(east.x, east.y, east.z, "jct"));                
+        }
+    }
+
+    var north = new THREE.Vector3(pos.x, 0, pos.z - 1);
+    if(dots.dotExists(north)){            
+        north.z += 0.5;
+        var nearest = nodesKdTree.nearest(north, 1, 1);
+        if(nearest && nearest[0][1] != 0){                
+            nodesKdTree.insert(new SnapPt(north.x, north.y, north.z, "jct"));                
+        }
+    }
+
+    var west = new THREE.Vector3(pos.x - 1, 0, pos.z);
+    if(dots.dotExists(west)){
+        west.x += 0.5;            
+        var nearest = nodesKdTree.nearest(west, 1, 1);
+        if(nearest && nearest[0][1] != 0){                
+            nodesKdTree.insert(new SnapPt(west.x, west.y, west.z, "jct"));                
+        }
+    }
+
+    var south = new THREE.Vector3(pos.x, 0, pos.z + 1);
+    if(dots.dotExists(south)){            
+        south.z -= 0.5;
+        var nearest = nodesKdTree.nearest(south, 1, 1);
+        if(nearest && nearest[0][1] != 0){                
+            nodesKdTree.insert(new SnapPt(south.x, south.y, south.z, "jct"));                
+        }
+    }
+}
+
 Dots.prototype.setupNodes = function(){
     var dots = this;
-    this.nodesKdTree = new kdTree([], Dots.distanceFn, ["x", "z"]);
-    var nodesKdTree = this.nodesKdTree;        
+    this.nodesKdTree = new kdTree([], Dots.distanceFn, ["x", "z"]);    
     this.dots.forEach(function(dot){
-        var pos = dot.position;
-        nodesKdTree.insert(new SnapPt(pos.x + 0.25, 0, pos.z + 0.25, "mid", "se"));
-        nodesKdTree.insert(new SnapPt(pos.x + 0.25, 0, pos.z - 0.25, "mid", "ne"));
-        nodesKdTree.insert(new SnapPt(pos.x - 0.25, 0, pos.z - 0.25, "mid", "nw"));
-        nodesKdTree.insert(new SnapPt(pos.x - 0.25, 0, pos.z + 0.25, "mid", "sw"));
-
-        var east = new THREE.Vector3(pos.x + 1, 0, pos.z);
-        if(dots.dotExists(east)){            
-            east.x -= 0.5;
-            var nearest = nodesKdTree.nearest(east, 1, 1);
-            if(nearest && nearest[0][1] != 0){                
-                nodesKdTree.insert(new SnapPt(east.x, east.y, east.z, "jct"));                
-            }
-        }
-
-        var north = new THREE.Vector3(pos.x, 0, pos.z - 1);
-        if(dots.dotExists(north)){            
-            north.z += 0.5;
-            var nearest = nodesKdTree.nearest(north, 1, 1);
-            if(nearest && nearest[0][1] != 0){                
-                nodesKdTree.insert(new SnapPt(north.x, north.y, north.z, "jct"));                
-            }
-        }
-
-        var west = new THREE.Vector3(pos.x - 1, 0, pos.z);
-        if(dots.dotExists(west)){
-            west.x += 0.5;            
-            var nearest = nodesKdTree.nearest(west, 1, 1);
-            if(nearest && nearest[0][1] != 0){                
-                nodesKdTree.insert(new SnapPt(west.x, west.y, west.z, "jct"));                
-            }
-        }
-
-        var south = new THREE.Vector3(pos.x, 0, pos.z + 1);
-        if(dots.dotExists(south)){            
-            south.z -= 0.5;
-            var nearest = nodesKdTree.nearest(south, 1, 1);
-            if(nearest && nearest[0][1] != 0){                
-                nodesKdTree.insert(new SnapPt(south.x, south.y, south.z, "jct"));                
-            }
-        }
+        dots.addNode(dot.position);        
     });
 }
 
