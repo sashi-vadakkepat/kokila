@@ -130,10 +130,7 @@
         };
         const grid = new THREE.InfiniteGridHelper(1, 10, new THREE.Color(color));        
         grid.material.uniforms.uColor.value.set( color.value );
-        scene.add(grid);              
-        
-        initDots();
-        setActionStateDash();
+        scene.add(grid);                              
         
         render();
     }                    
@@ -469,14 +466,16 @@
                             scene2.remove(stroke);
                             stroke = null;
                         }
-                        stroke = dots.getStroke(snapPos, pos,
-                                        startNode.position, startNode.type, startNode.direction,
-                                        minNode.position, minNode.type, minNode.direction
-                                    );                    
+
+                        var path = dots.getStroke(snapPos, pos,
+                            startNode.position, startNode.type, startNode.direction,
+                            minNode.position, minNode.type, minNode.direction
+                        ) 
+                        stroke = path.rep;                    
                         if(stroke)
                             scene2.add(stroke);
                     
-                        if(minDistance < 0.1){                            
+                        if(path.snapped){
                             stroke.material = Dots.StrokeMaterial;
                             dots.updateCrossings(snapPos, startNode, minNode);                            
                             prevNode = startNode;

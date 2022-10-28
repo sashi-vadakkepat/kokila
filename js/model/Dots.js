@@ -199,7 +199,7 @@ Dots.getAngle = function(dotPos, pos){
 }
 
 
-Dots.StrokePreviewMaterial = new THREE.LineBasicMaterial({color: 0x5555aa});
+Dots.StrokePreviewMaterial = new THREE.LineBasicMaterial({color: 0xff0000});
 Dots.StrokeMaterial = new THREE.LineBasicMaterial({color: 0x000000});
 
 Dots.snapAngle = function(angle, target){
@@ -220,103 +220,141 @@ Dots.snapAngle = function(angle, target){
     return ret;
 }
 
+Dots.getQuadrant = function(angle){
+
+    if(angle >= 0){
+        if(angle <= Math.PI/4)
+            return "e";
+        else if (angle <= 3 * Math.PI/4)
+            return "s";
+        else 
+            return "w";
+    }
+    else{
+        if(angle >= -Math.PI/4)
+            return "e";
+        else if (angle >= -3 * Math.PI/4)
+            return "n";
+        else 
+            return "w";
+    }        
+}
+
 Dots.prototype.getStroke = function(dotPos, pos, pos1, type1, dir1, pos2, type2, dir2){
+
+    var ret = {
+        rep: null,
+        snapped: false
+    }
     if(type1 == "jct" || type2 == "jct"){
 
         var line = new THREE.Line3(pos1, pos2);
         var closestPt = new THREE.Vector3();
         line.closestPointToPoint(pos, true, closestPt);
-        if(closestPt.distanceTo(pos2) < 0.1)
+        if(closestPt.distanceTo(pos2) < 0.01){
             closestPt = pos2;
+            ret.snapped = true;
+        }
         const linePts = [ pos1, closestPt ];
         const lineGeometry = new THREE.BufferGeometry().setFromPoints(linePts);
         var line = new THREE.Line(lineGeometry, Dots.StrokePreviewMaterial);                            
-        return line;
+        ret.rep = line;
+        return ret;
     }
     else{
         var arc = null;      
         var start = null;
         var end = null;
-        var angle = Dots.getAngle(dotPos, pos);        
-        var snapped = false;
+        var angle = Dots.getAngle(dotPos, pos);
+        var quadrant =  Dots.getQuadrant(angle);
 
         if(dir1 == "se"){
             
-            if(dir2 == "sw"){
+            if(dir2 == "sw" && quadrant == "s"){
                 // south                
                 //arc = new THREE.Line(Dots.gSouth, Dots.StrokePreviewMaterial);
                 start = Math.PI/4;
                 var next = Dots.snapAngle(angle, 3 * Math.PI/4);
                 end = next.angle;
+                ret.snapped = next.snapped;                
             }
-            else if(dir2 == "ne"){
+            else if(dir2 == "ne"  && quadrant == "e"){
                 // east
                 //arc = new THREE.Line(Dots.gEast, Dots.StrokePreviewMaterial);                  
                 end = Math.PI/4;
                 var next = Dots.snapAngle(angle, -Math.PI/4);
                 start = next.angle;
+                ret.snapped = next.snapped;                
             }            
         }
         else if(dir1 == "ne"){            
-            if(dir2 == "se"){
+            if(dir2 == "se" && quadrant == "e"){
                 // east
                 //arc = new THREE.Line(Dots.gEast, Dots.StrokePreviewMaterial);
                 start = -Math.PI/4;
                 var next = Dots.snapAngle(angle, Math.PI/4);
                 end = next.angle;
+                ret.snapped = next.snapped;
             }
-            else if(dir2 == "nw"){
+            else if(dir2 == "nw" && quadrant == "n"){
                 // north
                 //arc = new THREE.Line(Dots.gNorth, Dots.StrokePreviewMaterial);
                 end = -Math.PI/4;
                 var next = Dots.snapAngle(angle, -3 * Math.PI/4);
                 start = next.angle;
+                ret.snapped = next.snapped;
             }
         }
         else if(dir1 == "nw"){            
-            if(dir2 == "ne"){
+            if(dir2 == "ne" && quadrant == "n"){
                 // north
                 //arc = new THREE.Line(Dots.gNorth, Dots.StrokePreviewMaterial);
                 start = -3 * Math.PI/4;
                 var next = Dots.snapAngle(angle, -Math.PI/4);
                 end = next.angle;
+                ret.snapped = next.snapped;
             }
-            else if(dir2 == "sw"){
+            else if(dir2 == "sw" && quadrant == "w"){
                 // west
                 //arc = new THREE.Line(Dots.gWest, Dots.StrokePreviewMaterial);
                 end = -3 * Math.PI/4;
                 var next = Dots.snapAngle(angle, 3 * Math.PI/4);
                 start = next.angle;
+                ret.snapped = next.snapped;
             }
         }
         else if(dir1 == "sw"){            
-            if(dir2 == "nw"){
+            if(dir2 == "nw" && quadrant == "w"){
                 // west
                 //arc = new THREE.Line(Dots.gWest, Dots.StrokePreviewMaterial);
                 start = 3 * Math.PI/4;
                 var next = Dots.snapAngle(angle, -3 * Math.PI/4);
                 end = next.angle;
+                ret.snapped = next.snapped;
             }
-            else if(dir2 == "se"){
+            else if(dir2 == "se" && quadrant == "s"){
                 // south
                 //arc = new THREE.Line(Dots.gSouth, Dots.StrokePreviewMaterial);                
                 end = 3 * Math.PI/4;
                 var next = Dots.snapAngle(angle, Math.PI/4);
                 start = next.angle;
+                ret.snapped = next.snapped;
             }
         }        
 
-        var arcGeometry = Dots.createArcGeometryStartEnd(start, end);
-        arc = new THREE.Line(arcGeometry, Dots.StrokePreviewMaterial);
+        if(start && end){
+            var arcGeometry = Dots.createArcGeometryStartEnd(start, end);
+            arc = new THREE.Line(arcGeometry, Dots.StrokePreviewMaterial);
 
-        if(arc){
-            arc.position.x = dotPos.x;
-            arc.position.y = dotPos.y;
-            arc.position.z = dotPos.z;
-
-            arc.rotation.x = Math.PI/2;        
+            if(arc){
+                arc.position.x = dotPos.x;
+                arc.position.y = dotPos.y;
+                arc.position.z = dotPos.z;
+                arc.rotation.x = Math.PI/2;        
+                ret.rep = arc;
+            }
         }
-        return arc;
+        return ret;
     }    
 }
 
