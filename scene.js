@@ -175,7 +175,7 @@
         perspCamera.position.z = center.z;                 
 
         // set the reset data for the controls
-        perspControls.setResetData(center, perspCamera.position, perspCamera.zoom);                                                
+        //perspControls.setResetData(center, perspCamera.position, perspCamera.zoom);                                                
         perspCamera.lookAt(center);        
     }
 
@@ -211,7 +211,7 @@
         });     
 
         // set the reset data for the controls
-        orthoControls.setResetData(center, perspCamera.position, perspCamera.zoom);        
+        //orthoControls.setResetData(center, perspCamera.position, perspCamera.zoom);        
         orthoCamera.lookAt(center);
     }    
     
@@ -325,6 +325,9 @@
     var dragged = false;
     function down(event, x, y)
     {          
+        if(event.buttons != 1)
+            return;
+
         mouseDown = true;
         dragged = false;                
                         
@@ -493,6 +496,9 @@
 
     function up(event)
     {   
+        if(event.buttons != 1)
+            return;
+            
         if(!mouseDown)
             return;
         mouseDown = false;                
