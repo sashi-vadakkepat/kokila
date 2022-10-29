@@ -88,8 +88,8 @@
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;        
         renderer.shadowMapSoft = true;
 
-        renderer.outputEncoding = THREE.GammaEncoding;
-        renderer.gammaFactor = 2.2;
+        //renderer.outputEncoding = THREE.GammaEncoding;
+        //renderer.gammaFactor = 2.2;
                 
         // create the cameras
         createCamerasAndControls();
@@ -498,7 +498,7 @@
     {   
         if(event.buttons != 1)
             return;
-            
+
         if(!mouseDown)
             return;
         mouseDown = false;                
