@@ -496,9 +496,6 @@
 
     function up(event)
     {   
-        if(event.buttons != 1)
-            return;
-
         if(!mouseDown)
             return;
         mouseDown = false;                
