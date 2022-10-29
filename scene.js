@@ -479,7 +479,7 @@
                             scene2.add(stroke);
                     
                         if(path.snapped){
-                            stroke.material = Dots.StrokeMaterial;
+                            //stroke.material = Dots.StrokeMaterial;
                             dots.updateCrossings(snapPos, startNode, minNode);                            
                             prevNode = startNode;
                             startNode = minNode;

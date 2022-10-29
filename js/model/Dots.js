@@ -171,7 +171,7 @@ Dots.prototype.setupNodes = function(){
 */
 
 Dots.Radius = Math.sqrt(0.25 * 0.25 + 0.25 * 0.25);
-Dots.ArcRes = 25;
+Dots.ArcRes = 1000;
 
 Dots.createArcGeometry = function(){
     Dots.gEast = new THREE.BufferGeometry().setFromPoints(
@@ -188,10 +188,43 @@ Dots.createArcGeometry = function(){
     );    
 }
 
-Dots.createArcGeometryStartEnd = function(start, end){
-    var arc = new THREE.BufferGeometry().setFromPoints(
+Dots.matLine = null;
+
+Dots.createArcStartEnd = function(start, end){
+
+    if(!Dots.matLine){
+        Dots.matLine = new LineMaterial( {
+
+            color: 0x0000ff,
+            linewidth: .01, // in world units with size attenuation, pixels otherwise
+            vertexColors: true,
+        
+            //resolution:  // to be set by renderer, eventually
+            dashed: false,
+            alphaToCoverage: true,
+        
+        } );
+    }
+
+    var arcGeometry = new LineGeometry();
+    var pos2D = new THREE.Path().absarc(0, 0, Dots.Radius, start, end).getSpacedPoints(Dots.ArcRes);
+    var pos3D = [];
+        
+    for(var i = 0; i < pos2D.length; ++i){        
+        pos3D.push(pos2D[i].x, 0, pos2D[i].y);
+    }        
+    arcGeometry.setPositions(pos3D);
+
+    var arc = new Line2(arcGeometry, Dots.matLine);
+    arc.computeLineDistances();
+	arc.scale.set( 1, 1, 1 );
+
+    /*
+    var arcGeometry = new THREE.BufferGeometry().setFromPoints(
         new THREE.Path().absarc(0, 0, Dots.Radius, start, end).getSpacedPoints(Dots.ArcRes)
     );  
+    var arc = new THREE.Line(arcGeometry, Dots.StrokePreviewMaterial);
+    */
     return arc;  
 }
 
@@ -351,14 +384,13 @@ Dots.prototype.getStroke = function(dotPos, pos, pos1, type1, dir1, pos2, type2,
         }        
 
         if(start && end){
-            var arcGeometry = Dots.createArcGeometryStartEnd(start, end);
-            arc = new THREE.Line(arcGeometry, Dots.StrokePreviewMaterial);
+            var arc = Dots.createArcStartEnd(start, end);            
 
             if(arc){
                 arc.position.x = dotPos.x;
                 arc.position.y = dotPos.y;
                 arc.position.z = dotPos.z;
-                arc.rotation.x = Math.PI/2;        
+                //arc.rotation.x = Math.PI/2;        
                 ret.rep = arc;
             }
         }
