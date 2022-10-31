@@ -41,7 +41,7 @@ const line4Pts = [
 ];
 const line4Geometry = new THREE.BufferGeometry().setFromPoints(line4Pts);
 
-const cellMaterial = new THREE.LineBasicMaterial( { color: 0xbbbbbb } );
+const cellMaterial = new THREE.LineBasicMaterial( { color: 0xeeeeee } );
 
 Dots.distanceFn = function(a, b){
     var dx = a.x - b.x;
