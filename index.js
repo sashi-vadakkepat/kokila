@@ -86,6 +86,7 @@ function setupToolbars(){
     setupModeToolbar();
     setupCameraToolbar();		    
     setupNavigationToolbar();    
+    setupTrashCan();
     if(params['embedded'] || params['shared']){
         $('#save-btn').addClass("disabled");			
     }
@@ -130,6 +131,12 @@ function setupNavigationToolbar(){
 
     document.getElementById("nav-reset").addEventListener("click", function () {			
         contentWindow.resetCamera();
+    });		
+}
+
+function setupTrashCan(){ 
+    document.getElementById("trash-btn").addEventListener("click", function () {			
+        contentWindow.clear();
     });		
 }
         

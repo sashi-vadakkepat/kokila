@@ -248,6 +248,8 @@
         
         // update renderer
         renderer.setSize( window.innerWidth, window.innerHeight );        
+
+        resetCamera();
     }
 
     function animate() {
@@ -646,3 +648,7 @@
     window.addEventListener('resize', onResize, false);    
     addEventListeners();    
     
+
+    function clear(){
+        console.log('clear');
+    }
