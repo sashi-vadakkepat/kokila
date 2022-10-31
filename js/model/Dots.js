@@ -11,6 +11,7 @@ var Dots = function(){
     this.nodesKdTree = new kdTree([], Dots.distanceFn, ["x", "z"]);
 
     Dots.createArcGeometry();
+    Dots.createMatLine();
 }
 
 Dots.dotGeometry = new THREE.CircleGeometry( 0.08, 32 );
@@ -189,36 +190,35 @@ Dots.createArcGeometry = function(){
 }
 
 Dots.matLine = null;
+Dots.createMatLine = function(){
+    Dots.matLine = new LineMaterial( {
+        color: 0x000000,
+        linewidth: .025, // in world units with size attenuation, pixels otherwise
+        vertexColors: false,
+        worldUnits: true,    
+        //resolution:  // to be set by renderer, eventually
+        dashed: false,
+        //alphaToCoverage: true,    
+    } );
+}
 
-Dots.createArcStartEnd = function(start, end){
+Dots.createStrokeFromPts = function(pts){
 
-    if(!Dots.matLine){
-        Dots.matLine = new LineMaterial( {
+    var strokeGeometry = new LineGeometry();
+    strokeGeometry.setPositions(pts);
+    var stroke = new Line2(strokeGeometry, Dots.matLine);
+    stroke.computeLineDistances();
+	stroke.scale.set( 1, 1, 1 );
+    return stroke;  
+}
 
-            color: 0x0000ff,
-            linewidth: .01, // in world units with size attenuation, pixels otherwise
-            vertexColors: true,
-        
-            //resolution:  // to be set by renderer, eventually
-            dashed: false,
-            alphaToCoverage: true,
-        
-        } );
-    }
-
-    var arcGeometry = new LineGeometry();
+Dots.createArcStartEnd = function(start, end){        
     var pos2D = new THREE.Path().absarc(0, 0, Dots.Radius, start, end).getSpacedPoints(Dots.ArcRes);
-    var pos3D = [];
-        
+    var pos3D = [];        
     for(var i = 0; i < pos2D.length; ++i){        
         pos3D.push(pos2D[i].x, 0, pos2D[i].y);
     }        
-    arcGeometry.setPositions(pos3D);
-
-    var arc = new Line2(arcGeometry, Dots.matLine);
-    arc.computeLineDistances();
-	arc.scale.set( 1, 1, 1 );
-
+    var arc = Dots.createStrokeFromPts(pos3D);        
     /*
     var arcGeometry = new THREE.BufferGeometry().setFromPoints(
         new THREE.Path().absarc(0, 0, Dots.Radius, start, end).getSpacedPoints(Dots.ArcRes)
@@ -227,6 +227,14 @@ Dots.createArcStartEnd = function(start, end){
     */
     return arc;  
 }
+
+
+Dots.createLineStartEnd = function(start, end){    
+    var linePts = [ start.x, start.y, start.z, end.x, end.y, end.z ];
+    var line =  Dots.createStrokeFromPts(linePts);
+    return line;    
+}
+
 
 Dots.getAngle = function(dotPos, pos){
     var base = new THREE.Vector3(1, 0, 0);
@@ -295,11 +303,9 @@ Dots.prototype.getStroke = function(dotPos, pos, pos1, type1, dir1, pos2, type2,
         if(closestPt.distanceTo(pos2) == 0){
             closestPt = pos2;
             ret.snapped = true;
-        }
-        const linePts = [ pos1, closestPt ];
-        const lineGeometry = new THREE.BufferGeometry().setFromPoints(linePts);
-        var line = new THREE.Line(lineGeometry, Dots.StrokePreviewMaterial);                            
-        ret.rep = line;
+        }        
+        
+        ret.rep = Dots.createLineStartEnd(pos1, closestPt);
         return ret;
     }
     else{

@@ -76,8 +76,8 @@
         scene2 = new THREE.Scene();          
 
         // create a render and set the size
-        //renderer = new THREE.WebGLRenderer({antialias: true});
-        renderer = new THREE.WebGLRenderer();
+        renderer = new THREE.WebGLRenderer({antialias: true});
+        //renderer = new THREE.WebGLRenderer();
         
         renderer.setClearColor(new THREE.Color(0xFFFFFF));        
         renderer.setSize(window.innerWidth, window.innerHeight);
