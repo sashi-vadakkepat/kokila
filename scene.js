@@ -126,7 +126,7 @@
         document.getElementById("WebGL-output").appendChild(renderer.domElement);                                                    
                 
         const color = {
-            value: 0x888888
+            value: 0xaaaaaa
         };
         const grid = new THREE.InfiniteGridHelper(1, 10, new THREE.Color(color));        
         grid.material.uniforms.uColor.value.set( color.value );

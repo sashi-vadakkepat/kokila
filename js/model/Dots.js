@@ -41,7 +41,7 @@ const line4Pts = [
 ];
 const line4Geometry = new THREE.BufferGeometry().setFromPoints(line4Pts);
 
-const lineMaterial = new THREE.LineBasicMaterial( { color: 0xbbbbbb } );
+const cellMaterial = new THREE.LineBasicMaterial( { color: 0xbbbbbb } );
 
 Dots.distanceFn = function(a, b){
     var dx = a.x - b.x;
@@ -60,16 +60,16 @@ Dots.prototype.addDot = function(pos){
         dot.rotation.x = -Math.PI/2;
         this.dots.push(dot);        
         
-        var line1 = new THREE.Line(line1Geometry, lineMaterial);                            
+        var line1 = new THREE.Line(line1Geometry, cellMaterial);                            
         line1.position.x = pos.x;
         line1.position.z = pos.z;
-        var line2 = new THREE.Line(line2Geometry, lineMaterial);                            
+        var line2 = new THREE.Line(line2Geometry, cellMaterial);                            
         line2.position.x = pos.x;
         line2.position.z = pos.z;
-        var line3 = new THREE.Line(line3Geometry, lineMaterial);                            
+        var line3 = new THREE.Line(line3Geometry, cellMaterial);                            
         line3.position.x = pos.x;
         line3.position.z = pos.z;
-        var line4 = new THREE.Line(line4Geometry, lineMaterial);                            
+        var line4 = new THREE.Line(line4Geometry, cellMaterial);                            
         line4.position.x = pos.x;
         line4.position.z = pos.z;
 
@@ -160,16 +160,6 @@ Dots.prototype.addNode = function(pos){
         }
     }
 }
-
-/*
-Dots.prototype.setupNodes = function(){
-    var dots = this;
-    this.nodesKdTree = new kdTree([], Dots.distanceFn, ["x", "z"]);    
-    this.dots.forEach(function(dot){
-        dots.addNode(dot.position);        
-    });
-}
-*/
 
 Dots.Radius = Math.sqrt(0.25 * 0.25 + 0.25 * 0.25);
 Dots.ArcRes = 1000;
