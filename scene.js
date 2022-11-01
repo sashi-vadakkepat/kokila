@@ -105,7 +105,7 @@
 
         // add a simple ambient light to the top most scene
         // that will contain measurements, ink and suites
-        scene2.add(new THREE.AmbientLight(0xffffff, 1.0));
+        //scene2.add(new THREE.AmbientLight(0xffffff, 1.0));
                 
         // create the ground plane
         var planeGeometry = new THREE.PlaneGeometry(20000, 20000, 1, 1);
@@ -468,7 +468,7 @@
                         }            
                         
                         if(stroke){
-                            scene2.remove(stroke);
+                            scene.remove(stroke);
                             stroke = null;
                         }
 
@@ -478,7 +478,7 @@
                         ) 
                         stroke = path.rep;                    
                         if(stroke)
-                            scene2.add(stroke);
+                            scene.add(stroke);
                     
                         if(path.snapped){
                             //stroke.material = Dots.StrokeMaterial;
@@ -649,6 +649,21 @@
     addEventListeners();    
     
 
-    function clear(){
-        console.log('clear');
+    function clear(){     
+        var strokes = dots.getStrokes();
+        if(strokes.length){
+            strokes.forEach(function(s){
+                scene.remove(s);
+            });
+            dots.clearStrokes();
+        }
+        else{
+            cells = dots.getCells();
+            if(cells.length){
+                cells.forEach(function(c){
+                    scene.remove(c);
+                });
+                dots.clearCells();
+            }
+        }
     }
