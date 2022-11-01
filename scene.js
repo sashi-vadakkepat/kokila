@@ -520,6 +520,12 @@
                     scene.remove(t);
                 });                        
             }
+            if(stroke)
+                scene.remove(stroke);
+            if(circleStroke1)
+                scene.remove(circleStroke1);
+            circleStroke1 = null;
+            stroke = null;
             targetNodes = null;
             startNode = prevNode = null;
         }                    
