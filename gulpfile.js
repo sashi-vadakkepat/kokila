@@ -144,10 +144,14 @@ function copy_img(){
     return copy_from_to('img/**/*', 'release/img');
 }
 
+function copy_cdn(){
+    return copy_from_to('cdn/**/*', 'release/cdn');
+}
+
 
 const build_lightline = parallel(build_ll, build_ll_libs, build_scene, build_index);
 
-const copy_lightline = parallel(copy_css, copy_img, copy_docs, 
+const copy_lightline = parallel(copy_css, copy_img, copy_docs, copy_cdn,
                         copy_ll, copy_ll_libs, copy_scene, copy_index,  
                         copy_favicon, 
                         copy_index_html, 
